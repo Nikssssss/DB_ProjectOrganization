@@ -9,12 +9,12 @@ public class LoginView {
     private LoginPresenter presenter;
 
     private final JPanel loginPanel = new JPanel();
-    private final JTextField ipTF = new JTextField("Enter server ip");
-    private final JTextField portTF = new JTextField("Enter server port");
-    private final JTextField loginTF = new JTextField("Enter your login");
-    private final JPasswordField passwordTF = new JPasswordField("Enter your password");
+    private final JTextField ipTF = new JTextField("Введите IP-адрес сервера");
+    private final JTextField portTF = new JTextField("Введите порт сервера");
+    private final JTextField loginTF = new JTextField("Введите логин");
+    private final JPasswordField passwordTF = new JPasswordField("Введите пароль");
     private final JLabel errorLabel = new JLabel();
-    private final JButton loginButton = new JButton("Sign in");
+    private final JButton loginButton = new JButton("Войти");
 
     public void setPresenter(LoginPresenter presenter) {
         this.presenter = presenter;
@@ -51,7 +51,7 @@ public class LoginView {
         ipTF.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (ipTF.getText().equals("Enter server ip")) {
+                if (ipTF.getText().equals("Введите IP-адрес сервера")) {
                     ipTF.setText("");
                 }
             }
@@ -61,7 +61,7 @@ public class LoginView {
         portTF.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (portTF.getText().equals("Enter server port")) {
+                if (portTF.getText().equals("Введите порт сервера")) {
                     portTF.setText("");
                 }
             }
@@ -71,7 +71,7 @@ public class LoginView {
         loginTF.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (loginTF.getText().equals("Enter your login")) {
+                if (loginTF.getText().equals("Введите логин")) {
                     loginTF.setText("");
                 }
             }
@@ -81,7 +81,7 @@ public class LoginView {
         passwordTF.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (String.valueOf(passwordTF.getPassword()).equals("Enter your password")) {
+                if (String.valueOf(passwordTF.getPassword()).equals("Введите пароль")) {
                     passwordTF.setText("");
                 }
             }

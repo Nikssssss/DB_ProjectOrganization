@@ -5,9 +5,11 @@ import modules.tables.enums.TableType;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,6 +26,15 @@ public class TablesView {
     private final JButton backButton = new JButton("Назад в меню");
     private final JComboBox<String> entitiesComboBox = new JComboBox<>();
     private final JButton addRowButton = new JButton("Добавить запись");
+
+    private final TableModelListener tableModelListener = new TableModelListener() {
+        @Override
+        public void tableChanged(TableModelEvent event) {
+            if (event.getType() == TableModelEvent.UPDATE) {
+                presenter.cellDidEdit(event.getFirstRow());
+            }
+        }
+    };
 
     public void didLoad() {
         this.presenter.viewDidLoad();
@@ -60,11 +71,24 @@ public class TablesView {
                 this.setTableModelForEmployees(columnNames, dropDownListsData);
                 break;
             }
+            case DEPARTMENTS: {
+                this.setTableModelForDepartments(columnNames, dropDownListsData);
+                break;
+            }
+            case PROFESSIONS: {
+                this.setTableModelForProfessions(columnNames, dropDownListsData);
+                break;
+            }
         }
     }
 
     public ArrayList<String> getDataFromRow(int row) {
-        return new ArrayList<>((Vector<String>)this.entityTableModel.getDataVector().get(row));
+        Vector<String> dataRow = (Vector<String>) this.entityTableModel.getDataVector().get(row);
+        ArrayList<String> requiredDataRow = new ArrayList<>();
+        for (int i = 0; i < dataRow.size() - 1; i++) {
+            requiredDataRow.add(dataRow.get(i));
+        }
+        return requiredDataRow;
     }
 
     //MARK: private methods
@@ -86,28 +110,22 @@ public class TablesView {
             }
         });
         this.addRowButton.setPreferredSize(new Dimension(152, 50));
+        this.addRowButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                presenter.addRowButtonPressed();
+            }
+        });
 
         this.entitiesComboBox.addItem("Сотрудники");
         this.entitiesComboBox.addItem("Отделы");
-        this.entitiesComboBox.addItem("Оборудование");
         this.entitiesComboBox.addItem("Профессии");
-        this.entitiesComboBox.addItem("Проекты");
-        this.entitiesComboBox.addItem("Договоры");
-        this.entitiesComboBox.addItem("Субдоговоры");
-        this.entitiesComboBox.setSelectedItem("Сотрудники");
+//        this.entitiesComboBox.addItem("Оборудование");
+//        this.entitiesComboBox.addItem("Проекты");
+//        this.entitiesComboBox.addItem("Договоры");
+//        this.entitiesComboBox.addItem("Субдоговоры");
+//        this.entitiesComboBox.setSelectedItem("Сотрудники");
         this.entitiesComboBox.addActionListener(e -> presenter.comboBoxItemChanged());
-
-        this.entityTableModel = new ColumnEditableTableModel();
-        this.entityTable = new JTable(this.entityTableModel);
-        this.entityScrollPane = new JScrollPane(this.entityTable);
-        this.entityTable.setPreferredSize(new Dimension(750, 750));
-        this.entityScrollPane.setPreferredSize(new Dimension(750, 700));
-        this.entityScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                "Записи",
-                TitledBorder.CENTER,
-                TitledBorder.TOP));
-        this.entityTable.setColumnSelectionAllowed(false);
-        this.entityTable.setRowSelectionAllowed(false);
     }
 
     private void placeSubComponents() {
@@ -127,30 +145,44 @@ public class TablesView {
         constraints.gridy = 0;
         constraints.insets.left = 150;
         this.tablePanel.add(this.addRowButton, constraints);
+    }
 
+    private void reinitializeTable() {
+        if (this.entityScrollPane != null) {
+            this.tablePanel.remove(this.entityScrollPane);
+            this.tablePanel.validate();
+        }
+
+        this.entityTableModel = new ColumnEditableTableModel();
+        this.entityTable = new JTable(this.entityTableModel);
+        this.entityScrollPane = new JScrollPane(this.entityTable);
+        this.entityTable.setPreferredSize(new Dimension(750, 750));
+        this.entityScrollPane.setPreferredSize(new Dimension(750, 700));
+        this.entityScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                "Записи",
+                TitledBorder.CENTER,
+                TitledBorder.TOP));
+        this.entityTable.setColumnSelectionAllowed(false);
+        this.entityTable.setRowSelectionAllowed(false);
+
+        GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.insets.top = 20;
         constraints.insets.left = 0;
         constraints.gridwidth = 3;
         this.tablePanel.add(this.entityScrollPane, constraints);
+        this.tablePanel.validate();
     }
 
     private void setTableModelForEmployees(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
-        if (this.entityTableModel.getTableModelListeners().length > 1) {
-            this.entityTableModel.removeTableModelListener(this.entityTableModel.getTableModelListeners()[1]);
-        }
-        this.entityTableModel.setColumnCount(0);
-        this.entityTableModel.setRowCount(0);
+        this.reinitializeTable();
         this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4, 5, 6});
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
         this.entityTableModel.addColumn("");
 
-        if (this.entityTable.getMouseListeners().length > 0) {
-            this.entityTable.removeMouseListener(this.entityTable.getMouseListeners()[0]);
-        }
         this.entityTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -180,11 +212,95 @@ public class TablesView {
             }
         });
 
-        this.entityTableModel.addTableModelListener(event -> {
-            if (event.getType() == TableModelEvent.UPDATE) {
-                this.presenter.cellDidEdit(event.getFirstRow());
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
+    }
+
+    private void setTableModelForDepartments(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
+        this.reinitializeTable();
+        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2});
+        for (String columnName: columnNames) {
+            this.entityTableModel.addColumn(columnName);
+        }
+        this.entityTableModel.addColumn("");
+
+        this.entityTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (entityTable.getSelectedColumn() == 3) {
+                    if (entityTable.getSelectedRow() != -1) {
+                        presenter.deleteRowButtonPressed(entityTable.getSelectedRow());
+                    }
+                }
             }
         });
+
+        TableColumn managerColumn = this.entityTable.getColumnModel().getColumn(2);
+        JComboBox<String> managerComboBox = new JComboBox<>();
+        ArrayList<String> managers = dropDownListsData.get(0);
+        for (String manager: managers) {
+            managerComboBox.addItem(manager);
+        }
+        managerColumn.setCellEditor(new DefaultCellEditor(managerComboBox));
+
+        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(3);
+        deleteColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                component.setForeground(Color.RED);
+                return component;
+            }
+        });
+
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
+    }
+
+    private void setTableModelForProfessions(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
+        this.reinitializeTable();
+        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3});
+        for (String columnName: columnNames) {
+            this.entityTableModel.addColumn(columnName);
+        }
+        this.entityTableModel.addColumn("");
+
+        this.entityTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (entityTable.getSelectedColumn() == 4) {
+                    if (entityTable.getSelectedRow() != -1) {
+                        presenter.deleteRowButtonPressed(entityTable.getSelectedRow());
+                    }
+                }
+            }
+        });
+
+        TableColumn managementAbilityColumn = this.entityTable.getColumnModel().getColumn(2);
+        JComboBox<String> managementAbilityComboBox = new JComboBox<>();
+        ArrayList<String> managementAbilities = dropDownListsData.get(0);
+        for (String manager: managementAbilities) {
+            managementAbilityComboBox.addItem(manager);
+        }
+        managementAbilityColumn.setCellEditor(new DefaultCellEditor(managementAbilityComboBox));
+
+        TableColumn departmentColumn = this.entityTable.getColumnModel().getColumn(3);
+        JComboBox<String> departmentComboBox = new JComboBox<>();
+        ArrayList<String> departments = dropDownListsData.get(1);
+        for (String manager: departments) {
+            departmentComboBox.addItem(manager);
+        }
+        departmentColumn.setCellEditor(new DefaultCellEditor(departmentComboBox));
+
+        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(4);
+        deleteColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                component.setForeground(Color.RED);
+                return component;
+            }
+        });
+
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
     }
 
 }

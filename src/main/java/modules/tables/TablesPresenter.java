@@ -59,6 +59,12 @@ public class TablesPresenter {
         }
     }
 
+    public void addRowButtonPressed() {
+        router.showAddingScene(interactor.getConnection(),
+                interactor.getCurrentTableResultSet(),
+                TableType.valueOfLabel(Objects.requireNonNull(view.get()).getCurrentTableName()));
+    }
+
     //MARK: private methods
 
     private void replaceCurrentTable() {
@@ -81,6 +87,22 @@ public class TablesPresenter {
                 ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
                 ArrayList<String> professions = this.interactor.getAllProfessions();
                 dropDownListData.add(professions);
+                Objects.requireNonNull(this.view.get()).setTableModelForTableType(tableType, columnNames, dropDownListData);
+                break;
+            }
+            case DEPARTMENTS: {
+                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
+                ArrayList<String> managers = this.interactor.getAllManagers();
+                dropDownListData.add(managers);
+                Objects.requireNonNull(this.view.get()).setTableModelForTableType(tableType, columnNames, dropDownListData);
+                break;
+            }
+            case PROFESSIONS: {
+                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
+                ArrayList<String> managementAbilities = this.interactor.getAllManagementAbilities();
+                ArrayList<String> departments = this.interactor.getAllDepartments();
+                dropDownListData.add(managementAbilities);
+                dropDownListData.add(departments);
                 Objects.requireNonNull(this.view.get()).setTableModelForTableType(tableType, columnNames, dropDownListData);
                 break;
             }

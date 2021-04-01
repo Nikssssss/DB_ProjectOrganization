@@ -177,7 +177,7 @@ ALTER TABLE Professions
 	ADD CONSTRAINT  XPKProfessions PRIMARY KEY (profession_id);
 
 ALTER TABLE Professions
-	ADD (CONSTRAINT R_40 FOREIGN KEY (department_id) REFERENCES Departments (department_id) ON DELETE SET NULL);
+	ADD (CONSTRAINT R_40 FOREIGN KEY (department_id) REFERENCES Departments (department_id) ON DELETE CASCADE);
 
 ALTER TABLE Contracts
 	ADD (CONSTRAINT R_29 FOREIGN KEY (contract_manager) REFERENCES Employees (employee_id) ON DELETE SET NULL);
@@ -198,7 +198,7 @@ ALTER TABLE Projects_Contracts
 	ADD (CONSTRAINT R_6 FOREIGN KEY (contract_id) REFERENCES Contracts (contract_id));
 
 ALTER TABLE Employees
-	ADD (CONSTRAINT R_24 FOREIGN KEY (profession_id) REFERENCES Professions (profession_id) ON DELETE SET NULL);
+	ADD (CONSTRAINT R_24 FOREIGN KEY (profession_id) REFERENCES Professions (profession_id) ON DELETE CASCADE);
 
 ALTER TABLE Projects_Employees
 	ADD (CONSTRAINT R_9 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id));

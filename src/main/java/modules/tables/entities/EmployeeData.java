@@ -3,7 +3,7 @@ package modules.tables.entities;
 import java.sql.Date;
 
 public class EmployeeData {
-    private final int employeeId;
+    private final Integer employeeId;
     private final String firstName;
     private final String lastName;
     private final Date hireDate;
@@ -11,7 +11,7 @@ public class EmployeeData {
     private final int salary;
     private final int age;
 
-    public EmployeeData(int employeeId, String firstName, String lastName, Date hireDate, int professionId, int salary, int age) {
+    public EmployeeData(Integer employeeId, String firstName, String lastName, Date hireDate, int professionId, int salary, int age) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;

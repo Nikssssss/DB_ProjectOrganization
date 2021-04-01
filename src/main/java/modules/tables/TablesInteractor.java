@@ -1,6 +1,8 @@
 package modules.tables;
 
+import modules.tables.entities.DepartmentData;
 import modules.tables.entities.EmployeeData;
+import modules.tables.entities.ProfessionData;
 import modules.tables.enums.TableType;
 import modules.tables.services.DataHandlerService;
 
@@ -24,7 +26,23 @@ public class TablesInteractor {
 
     public ArrayList<ArrayList<String>> getDataFromTable(TableType tableType) throws SQLException {
         Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        String query = "select " + this.getAllEmployeesFields() + " from " + tableType.toString();
+
+        String allTableFields = "";
+        switch (tableType) {
+            case EMPLOYEES: {
+                allTableFields = this.getAllEmployeesFields();
+                break;
+            }
+            case DEPARTMENTS: {
+                allTableFields = this.getAllDepartmentsFields();
+                break;
+            }
+            case PROFESSIONS: {
+                allTableFields = this.getAllProfessionsFields();
+                break;
+            }
+        }
+        String query = "select " + allTableFields + " from " + tableType.toString();
         this.currentTableResultSet = statement.executeQuery(query);
         this.currentTableResultSetMetaData = this.currentTableResultSet.getMetaData();
 
@@ -80,7 +98,43 @@ public class TablesInteractor {
         while (resultSet.next()) {
             professions.add(resultSet.getString(1));
         }
+        resultSet.close();
+        statement.close();
         return professions;
+    }
+
+    public ArrayList<String> getAllManagers() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select employee_id, first_name, last_name from employees";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> professions = new ArrayList<>();
+        professions.add("-");
+        while (resultSet.next()) {
+            professions.add(resultSet.getString(1) + ": " + resultSet.getString(2) + " " + resultSet.getString(3));
+        }
+        resultSet.close();
+        statement.close();
+        return professions;
+    }
+
+    public ArrayList<String> getAllDepartments() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select department_name from departments";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> professions = new ArrayList<>();
+        while (resultSet.next()) {
+            professions.add(resultSet.getString(1));
+        }
+        resultSet.close();
+        statement.close();
+        return professions;
+    }
+
+    public ArrayList<String> getAllManagementAbilities() {
+        ArrayList<String> managementAbilities = new ArrayList<>();
+        managementAbilities.add("Да");
+        managementAbilities.add("Нет");
+        return managementAbilities;
     }
 
     public void updateRow(int row, ArrayList<String> rowData, TableType tableType) throws SQLException {
@@ -89,8 +143,13 @@ public class TablesInteractor {
                 this.updateEmployeesRow(row, rowData);
                 break;
             }
-            default: {
-
+            case DEPARTMENTS: {
+                this.updateDepartmentsRow(row, rowData);
+                break;
+            }
+            case PROFESSIONS: {
+                this.updateProfessionsRow(row, rowData);
+                break;
             }
         }
     }
@@ -100,10 +159,22 @@ public class TablesInteractor {
         this.currentTableResultSet.deleteRow();
     }
 
+    public ResultSet getCurrentTableResultSet() {
+        return currentTableResultSet;
+    }
+
     //MARK: private methods
 
     private String getAllEmployeesFields() {
         return "employee_id, first_name, last_name, hire_date, profession_id, salary, age";
+    }
+
+    private String getAllDepartmentsFields() {
+        return "department_id, department_name, manager_id";
+    }
+
+    private String getAllProfessionsFields() {
+        return "profession_id, profession_name, management_ability, department_id";
     }
 
     private void updateEmployeesRow(int row, ArrayList<String> rowData) throws SQLException {
@@ -115,6 +186,23 @@ public class TablesInteractor {
         this.currentTableResultSet.updateInt(5, employeeData.getProfessionId());
         this.currentTableResultSet.updateInt(6, employeeData.getSalary());
         this.currentTableResultSet.updateInt(7, employeeData.getAge());
+        this.currentTableResultSet.updateRow();
+    }
+
+    private void updateDepartmentsRow(int row, ArrayList<String> rowData) throws SQLException {
+        DepartmentData departmentData = this.dataHandlerService.getDatabaseRowDataFromDepartments(rowData);
+        this.currentTableResultSet.absolute(row);
+        this.currentTableResultSet.updateString(2, departmentData.getDepartmentName());
+        this.currentTableResultSet.updateInt(3, departmentData.getManagerId());
+        this.currentTableResultSet.updateRow();
+    }
+
+    private void updateProfessionsRow(int row, ArrayList<String> rowData) throws SQLException {
+        ProfessionData professionData = this.dataHandlerService.getDatabaseRowDataFromProfessions(rowData);
+        this.currentTableResultSet.absolute(row);
+        this.currentTableResultSet.updateString(2, professionData.getProfessionName());
+        this.currentTableResultSet.updateInt(3, professionData.getManagementAbility());
+        this.currentTableResultSet.updateInt(4, professionData.getDepartmentId());
         this.currentTableResultSet.updateRow();
     }
 }
