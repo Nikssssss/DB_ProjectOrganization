@@ -4,16 +4,10 @@ import modules.tables.entities.DepartmentData;
 import modules.tables.entities.EmployeeData;
 import modules.tables.entities.ProfessionData;
 import modules.tables.enums.TableType;
-import modules.tables.services.DataHandlerService;
+import services.DataHandlerService;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class AddingInteractor {
     private Connection connection;
@@ -115,6 +109,7 @@ public class AddingInteractor {
             }
         }
         resultSet.insertRow();
+        connection.commit();
     }
 
     //MARK: private methods

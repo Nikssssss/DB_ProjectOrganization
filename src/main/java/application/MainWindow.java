@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
     public MainWindow(){
-        super("Project Organization");
+        super("Проектная организация");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(400, 400);
         this.centerWindow();

@@ -33,6 +33,7 @@ public class LoginInteractor {
         Locale.setDefault(Locale.ENGLISH);
         String url = "jdbc:oracle:thin:@" + ip + ":" + port + ":XE";
         connection = DriverManager.getConnection(url, user, password);
+        connection.setAutoCommit(false);
     }
 
     public void initializeDatabase() throws SQLException{
@@ -58,6 +59,8 @@ public class LoginInteractor {
             statement.addBatch(query);
         }
         statement.executeBatch();
+        statement.close();
+        connection.commit();
     }
 
     private void createSequences() throws SQLException {
@@ -70,6 +73,8 @@ public class LoginInteractor {
             statement.addBatch(query);
         }
         statement.executeBatch();
+        statement.close();
+        connection.commit();
     }
 
     private void createAutoincrementTriggers() throws SQLException {
@@ -82,6 +87,8 @@ public class LoginInteractor {
             statement.addBatch(query + " end;");
         }
         statement.executeBatch();
+        statement.close();
+        connection.commit();
     }
 
     private void initializeTables() throws SQLException {
@@ -94,6 +101,8 @@ public class LoginInteractor {
             statement.addBatch(query);
         }
         statement.executeBatch();
+        statement.close();
+        connection.commit();
     }
 
     private void dropAllObjectsWithKind(String objectKind) throws SQLException {
@@ -106,5 +115,7 @@ public class LoginInteractor {
             statement.addBatch(query);
         }
         statement.executeBatch();
+        statement.close();
+        connection.commit();
     }
 }

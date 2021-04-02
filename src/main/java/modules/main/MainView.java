@@ -51,6 +51,12 @@ public class MainView {
             }
         });
         this.queriesButton.setPreferredSize(new Dimension(200, 100));
+        this.queriesButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                presenter.queriesButtonPressed();
+            }
+        });
     }
 
     private void placeSubComponents(){

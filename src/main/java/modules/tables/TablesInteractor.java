@@ -4,7 +4,7 @@ import modules.tables.entities.DepartmentData;
 import modules.tables.entities.EmployeeData;
 import modules.tables.entities.ProfessionData;
 import modules.tables.enums.TableType;
-import modules.tables.services.DataHandlerService;
+import services.DataHandlerService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -157,6 +157,7 @@ public class TablesInteractor {
     public void deleteRow(int row) throws SQLException {
         this.currentTableResultSet.absolute(row);
         this.currentTableResultSet.deleteRow();
+        this.connection.commit();
     }
 
     public ResultSet getCurrentTableResultSet() {
@@ -187,6 +188,7 @@ public class TablesInteractor {
         this.currentTableResultSet.updateInt(6, employeeData.getSalary());
         this.currentTableResultSet.updateInt(7, employeeData.getAge());
         this.currentTableResultSet.updateRow();
+        this.connection.commit();
     }
 
     private void updateDepartmentsRow(int row, ArrayList<String> rowData) throws SQLException {
@@ -195,6 +197,7 @@ public class TablesInteractor {
         this.currentTableResultSet.updateString(2, departmentData.getDepartmentName());
         this.currentTableResultSet.updateInt(3, departmentData.getManagerId());
         this.currentTableResultSet.updateRow();
+        this.connection.commit();
     }
 
     private void updateProfessionsRow(int row, ArrayList<String> rowData) throws SQLException {
@@ -204,5 +207,6 @@ public class TablesInteractor {
         this.currentTableResultSet.updateInt(3, professionData.getManagementAbility());
         this.currentTableResultSet.updateInt(4, professionData.getDepartmentId());
         this.currentTableResultSet.updateRow();
+        this.connection.commit();
     }
 }

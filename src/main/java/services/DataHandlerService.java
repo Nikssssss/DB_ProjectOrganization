@@ -1,4 +1,4 @@
-package modules.tables.services;
+package services;
 
 import modules.tables.entities.DepartmentData;
 import modules.tables.entities.EmployeeData;
@@ -55,6 +55,17 @@ public class DataHandlerService {
         } else {
             return this.getDatabaseInsertingRowDataForProfessions(readableRowData);
         }
+    }
+
+    public String getProfessionIdBy(String professionName) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select profession_id from professions where profession_name = '" + professionName + "'";
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
     }
 
     //MARK: private methods
@@ -179,17 +190,6 @@ public class DataHandlerService {
                 readableRowData.get(1),
                 Integer.parseInt(readableRowData.get(2)),
                 Integer.parseInt(readableRowData.get(3)));
-    }
-
-    private String getProfessionIdBy(String professionName) throws SQLException {
-        Statement statement = connection.createStatement();
-        String query = "select profession_id from professions where profession_name = '" + professionName + "'";
-        ResultSet resultSet = statement.executeQuery(query);
-        resultSet.next();
-        String result = resultSet.getString(1);
-        resultSet.close();
-        statement.close();
-        return result;
     }
 
     private String getManagerIdBy(String managerInfo) {

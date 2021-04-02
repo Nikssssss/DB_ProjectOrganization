@@ -27,4 +27,8 @@ public class MainPresenter {
     public void tablesButtonPressed() {
         router.showTableScene(interactor.getConnection());
     }
+
+    public void queriesButtonPressed() {
+        router.showQueriesScene(interactor.getConnection());
+    }
 }
