@@ -14,7 +14,6 @@ public class QueryAssembly {
         presenter.setInteractor(interactor);
         presenter.setRouter(router);
 
-        interactor.setConnection(DatabaseConnection.getConnection());
         interactor.setQueryType(queryType);
 
         return view;

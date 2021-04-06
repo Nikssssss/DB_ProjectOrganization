@@ -1,4 +1,4 @@
-package modules.tables.entities;
+package common.entities;
 
 public class ProfessionData {
     private final Integer professionId;

@@ -1,4 +1,4 @@
-package modules.tables.entities;
+package common.entities;
 
 import java.sql.Date;
 

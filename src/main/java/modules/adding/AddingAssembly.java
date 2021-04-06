@@ -1,6 +1,5 @@
 package modules.adding;
 
-import common.DatabaseConnection;
 import modules.tables.enums.TableType;
 
 import java.sql.ResultSet;
@@ -16,7 +15,6 @@ public class AddingAssembly {
         presenter.setInteractor(interactor);
         presenter.setRouter(router);
 
-        interactor.setConnection(DatabaseConnection.getConnection());
         interactor.setResultSet(resultSet);
         interactor.setCurrentTableType(tableType);
 

@@ -1,11 +1,11 @@
-package modules.tables.entities;
+package common.entities;
 
 public class DepartmentData {
     private final Integer departmentId;
     private final String departmentName;
-    private final int managerId;
+    private final Integer managerId;
 
-    public DepartmentData(Integer departmentId, String departmentName, int managerId) {
+    public DepartmentData(Integer departmentId, String departmentName, Integer managerId) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
         this.managerId = managerId;
@@ -19,7 +19,7 @@ public class DepartmentData {
         return departmentName;
     }
 
-    public int getManagerId() {
+    public Integer getManagerId() {
         return managerId;
     }
 }

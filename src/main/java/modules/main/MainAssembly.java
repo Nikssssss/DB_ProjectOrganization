@@ -1,7 +1,5 @@
 package modules.main;
 
-import common.DatabaseConnection;
-
 public class MainAssembly {
     public static MainView assemble() {
         MainView view = new MainView();
@@ -12,8 +10,6 @@ public class MainAssembly {
         view.setPresenter(presenter);
         presenter.setInteractor(interactor);
         presenter.setRouter(router);
-
-        interactor.setConnection(DatabaseConnection.getConnection());
 
         return view;
     }

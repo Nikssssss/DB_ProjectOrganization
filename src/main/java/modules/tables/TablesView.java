@@ -9,7 +9,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -50,6 +49,10 @@ public class TablesView {
 
     public JPanel getTablePanel() {
         return tablePanel;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        JOptionPane.showMessageDialog(tablePanel, errorMessage, "Error!", JOptionPane.ERROR_MESSAGE);
     }
 
     public void setTableRowsData(List<ArrayList<String>> rows) {

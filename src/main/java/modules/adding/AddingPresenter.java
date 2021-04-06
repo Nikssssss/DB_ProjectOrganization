@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class AddingPresenter {
-    private WeakReference<AddingView> view;
+    private final WeakReference<AddingView> view;
     private AddingInteractor interactor;
     private AddingRouter router;
 
@@ -23,27 +23,12 @@ public class AddingPresenter {
     }
 
     public void viewDidLoad() {
-        ArrayList<ArrayList<String>> comboBoxData = new ArrayList<>();
         try {
-            switch (interactor.getCurrentTableType()) {
-                case EMPLOYEES: {
-                    comboBoxData.add(interactor.getAllProfessionNames());
-                    break;
-                }
-                case DEPARTMENTS: {
-                    comboBoxData.add(interactor.getAllManagersInfo());
-                    break;
-                }
-                case PROFESSIONS: {
-                    comboBoxData.add(interactor.getAllManagementAbilities());
-                    comboBoxData.add(interactor.getAllDepartmentNames());
-                    break;
-                }
-            }
+            ArrayList<ArrayList<String>> columnsDropDownListData = interactor.getColumnsDropDownListData();
+            Objects.requireNonNull(this.view.get()).configureView(interactor.getCurrentTableType(), columnsDropDownListData);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Objects.requireNonNull(this.view.get()).configureView(interactor.getCurrentTableType(), comboBoxData);
     }
 
     public void backToTablesButtonPressed() {
@@ -67,8 +52,5 @@ public class AddingPresenter {
             }
         }
     }
-
-    //MARK: private methods
-
 
 }

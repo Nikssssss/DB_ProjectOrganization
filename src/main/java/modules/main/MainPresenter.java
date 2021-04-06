@@ -26,11 +26,21 @@ public class MainPresenter {
     }
 
     public void tablesButtonPressed() {
-        router.showTableScene();
+        try {
+            interactor.checkDatabaseCreation();
+            router.showTableScene();
+        } catch (SQLException e) {
+            Objects.requireNonNull(view.get()).setErrorMessage("База данных очищена. Пожалуйста, нажмите кнопку \"Создать БД\" для инициализации базы данных");
+        }
     }
 
     public void queriesButtonPressed() {
-        router.showQueriesScene();
+        try {
+            interactor.checkDatabaseCreation();
+            router.showQueriesScene();
+        } catch (SQLException e) {
+            Objects.requireNonNull(view.get()).setErrorMessage("База данных очищена. Пожалуйста, нажмите кнопку \"Создать БД\" для инициализации базы данных");
+        }
     }
 
     public void createDatabaseButtonPressed() {

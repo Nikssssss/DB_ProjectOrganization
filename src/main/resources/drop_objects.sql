@@ -1,35 +1,25 @@
 DROP TABLE Subcontracts_Projects CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Subcontracts CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Projects_Contracts CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Projects_Employees CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Employees_Contracts CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Contracts CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Technics CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Engineers CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Constructors CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Accountants CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Managers CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Equipment_Projects CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Projects CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Equipment CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Employees CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Professions CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE Departments CASCADE CONSTRAINTS PURGE;
-
 DROP TABLE EquipmentType CASCADE CONSTRAINTS PURGE;
+drop sequence employees_sequence;
+drop sequence departments_sequence;
+drop sequence professions_sequence;
+drop sequence equipment_sequence;
+drop sequence projects_sequence;
+drop sequence contracts_sequence;
+drop sequence subcontracts_sequence;

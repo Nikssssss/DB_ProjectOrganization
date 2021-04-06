@@ -2,24 +2,16 @@ package modules.query;
 
 import modules.queries.enums.QueryType;
 import modules.query.entities.OrganizationRosterData;
-import modules.tables.enums.TableType;
-import services.DataHandlerService;
+import services.DataTransformer;
+import services.QueriesExecutor;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class QueryInteractor {
-    private Connection connection;
     private QueryType queryType;
-    private DataHandlerService dataHandlerService;
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-        dataHandlerService = new DataHandlerService(connection);
-    }
 
     public void setQueryType(QueryType queryType) {
         this.queryType = queryType;
@@ -29,7 +21,7 @@ public class QueryInteractor {
         ArrayList<ArrayList<String>> comboBoxData = new ArrayList<>();
         switch (queryType) {
             case ORGANIZATION_ROSTER: {
-                ArrayList<String> professions = this.getAllProfessions();
+                ArrayList<String> professions = QueriesExecutor.getAllProfessionNames();
                 professions.add(0, "Все профессии");
                 comboBoxData.add(professions);
             }
@@ -65,19 +57,6 @@ public class QueryInteractor {
 
     //MARK: private methods
 
-    private ArrayList<String> getAllProfessions() throws SQLException {
-        Statement statement = connection.createStatement();
-        String query = "select profession_name from professions";
-        ResultSet resultSet = statement.executeQuery(query);
-        ArrayList<String> professions = new ArrayList<>();
-        while (resultSet.next()) {
-            professions.add(resultSet.getString(1));
-        }
-        resultSet.close();
-        statement.close();
-        return professions;
-    }
-
     private ArrayList<String> getOrganizationRosterColumns() {
         ArrayList<String> organizationRosterColumns = new ArrayList<>();
         organizationRosterColumns.add("ID");
@@ -108,7 +87,7 @@ public class QueryInteractor {
                 queryParameters.get(6));
         String query = "select * from employees where";
         if (!organizationRosterData.getProfession().equals("Все профессии")) {
-            query += " profession_id = " + dataHandlerService.getProfessionIdBy(organizationRosterData.getProfession());
+            query += " profession_id = " + DataTransformer.getDatabaseProfessionIdBy(organizationRosterData.getProfession());
         }
         if (organizationRosterData.getMinHireDate() != null && !organizationRosterData.getMinHireDate().equals("")) {
             query += unionWordFor(query) + "hire_date >= to_date('" + organizationRosterData.getMinHireDate() + "', 'yyyy-mm-dd')";
@@ -131,8 +110,8 @@ public class QueryInteractor {
         if (query.endsWith(" where")) {
             query = query.substring(0, query.indexOf(" where"));
         }
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
+
+        ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
         ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
         ArrayList<String> columnNames = new ArrayList<>();
@@ -147,10 +126,10 @@ public class QueryInteractor {
             }
             queryResult.add(row);
         }
-
-        statement.close();
         resultSet.close();
-        ArrayList<ArrayList<String>> readableQueryResult = dataHandlerService.getReadableDataFrom(queryResult, TableType.EMPLOYEES);
-        return new ArrayList<>(readableQueryResult.subList(1, readableQueryResult.size()));
+
+        ArrayList<ArrayList<String>> readableQueryResult = DataTransformer.getReadableColumnsAndRowsForEmployees(queryResult);
+        List<ArrayList<String>> readableQueryRows = readableQueryResult.subList(1, readableQueryResult.size());
+        return new ArrayList<>(readableQueryRows);
     }
 }

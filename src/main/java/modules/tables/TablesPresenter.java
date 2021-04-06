@@ -5,10 +5,11 @@ import modules.tables.enums.TableType;
 import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TablesPresenter {
-    private WeakReference<TablesView> view;
+    private final WeakReference<TablesView> view;
     private TablesInteractor interactor;
     private TablesRouter router;
 
@@ -43,8 +44,7 @@ public class TablesPresenter {
         try {
             this.interactor.updateRow(row + 1, rowData, currentTableType);
         } catch (SQLException e) {
-            //TODO: show error message in view
-            e.printStackTrace();
+            Objects.requireNonNull(view.get()).setErrorMessage(e.getMessage());
         }
     }
 
@@ -52,10 +52,10 @@ public class TablesPresenter {
         try {
             this.interactor.deleteRow(row + 1);
             TableType currentTableType = TableType.valueOfLabel(Objects.requireNonNull(view.get()).getCurrentTableName());
-            ArrayList<ArrayList<String>> currentTableData = this.interactor.getDataFromCurrentTable(currentTableType);
+            ArrayList<ArrayList<String>> currentTableData = this.interactor.getColumnsAndRowsFromCurrentTable(currentTableType);
             Objects.requireNonNull(view.get()).setTableRowsData(currentTableData.subList(1, currentTableData.size()));
         } catch (SQLException e) {
-            e.printStackTrace();
+            Objects.requireNonNull(view.get()).setErrorMessage(e.getMessage());
         }
     }
 
@@ -71,40 +71,16 @@ public class TablesPresenter {
         assert view != null;
         TableType currentTableType = TableType.valueOfLabel(view.getCurrentTableName());
         try {
-            ArrayList<ArrayList<String>> currentTableData = this.interactor.getDataFromTable(currentTableType);
-            this.setViewColumnsStructureForTable(currentTableType, currentTableData.get(0));
-            view.setTableRowsData(currentTableData.subList(1, currentTableData.size()));
+            ArrayList<ArrayList<String>> currentTableData = interactor.getColumnsAndRowsFromTable(currentTableType);
+            ArrayList<ArrayList<String>> columnsDropDownListData = interactor.getColumnsDropDownListDataForTable(currentTableType);
+            ArrayList<String> columnNames = currentTableData.get(0);
+            List<ArrayList<String>> tableRows = currentTableData.subList(1, currentTableData.size());
+            view.setTableModelForTableType(currentTableType, columnNames, columnsDropDownListData);
+            view.setTableRowsData(tableRows);
         } catch (SQLException e) {
-            //TODO: show error message in view
             e.printStackTrace();
+            view.setErrorMessage(e.getMessage());
         }
     }
 
-    private void setViewColumnsStructureForTable(TableType tableType, ArrayList<String> columnNames) throws SQLException {
-        switch (tableType) {
-            case EMPLOYEES: {
-                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
-                ArrayList<String> professions = this.interactor.getAllProfessions();
-                dropDownListData.add(professions);
-                Objects.requireNonNull(this.view.get()).setTableModelForTableType(tableType, columnNames, dropDownListData);
-                break;
-            }
-            case DEPARTMENTS: {
-                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
-                ArrayList<String> managers = this.interactor.getAllManagers();
-                dropDownListData.add(managers);
-                Objects.requireNonNull(this.view.get()).setTableModelForTableType(tableType, columnNames, dropDownListData);
-                break;
-            }
-            case PROFESSIONS: {
-                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
-                ArrayList<String> managementAbilities = this.interactor.getAllManagementAbilities();
-                ArrayList<String> departments = this.interactor.getAllDepartments();
-                dropDownListData.add(managementAbilities);
-                dropDownListData.add(departments);
-                Objects.requireNonNull(this.view.get()).setTableModelForTableType(tableType, columnNames, dropDownListData);
-                break;
-            }
-        }
-    }
 }
