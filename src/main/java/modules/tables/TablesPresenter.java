@@ -2,18 +2,18 @@ package modules.tables;
 
 import modules.tables.enums.TableType;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class TablesPresenter {
-    private SoftReference<TablesView> view;
+    private WeakReference<TablesView> view;
     private TablesInteractor interactor;
     private TablesRouter router;
 
     public TablesPresenter(TablesView view) {
-        this.view = new SoftReference<>(view);
+        this.view = new WeakReference<>(view);
     }
 
     public void setInteractor(TablesInteractor interactor) {
@@ -30,7 +30,7 @@ public class TablesPresenter {
     }
 
     public void backButtonPressed() {
-        this.router.showMainScene(this.interactor.getConnection());
+        this.router.showMainScene();
     }
 
     public void comboBoxItemChanged() {
@@ -60,8 +60,7 @@ public class TablesPresenter {
     }
 
     public void addRowButtonPressed() {
-        router.showAddingScene(interactor.getConnection(),
-                interactor.getCurrentTableResultSet(),
+        router.showAddingScene(interactor.getCurrentTableResultSet(),
                 TableType.valueOfLabel(Objects.requireNonNull(view.get()).getCurrentTableName()));
     }
 

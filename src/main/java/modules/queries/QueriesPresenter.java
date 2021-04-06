@@ -2,17 +2,17 @@ package modules.queries;
 
 import modules.queries.enums.QueryType;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class QueriesPresenter {
-    private SoftReference<QueriesView> view;
+    private WeakReference<QueriesView> view;
     private QueriesInteractor interactor;
     private QueriesRouter router;
 
     public QueriesPresenter(QueriesView view) {
-        this.view = new SoftReference<>(view);
+        this.view = new WeakReference<>(view);
     }
 
     public void setInteractor(QueriesInteractor interactor) {
@@ -30,11 +30,11 @@ public class QueriesPresenter {
     }
 
     public void backToMenuButtonPressed() {
-        router.showMenuScene(interactor.getConnection());
+        router.showMenuScene();
     }
 
     public void rowDidSelect(int row) {
-        router.showQueryScene(interactor.getConnection(), QueryType.valueOfRaw(row));
+        router.showQueryScene(QueryType.valueOfRaw(row));
     }
 
 }

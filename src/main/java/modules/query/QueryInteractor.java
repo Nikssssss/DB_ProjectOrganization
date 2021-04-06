@@ -25,10 +25,6 @@ public class QueryInteractor {
         this.queryType = queryType;
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public ArrayList<ArrayList<String>> getComboBoxData() throws SQLException {
         ArrayList<ArrayList<String>> comboBoxData = new ArrayList<>();
         switch (queryType) {
@@ -152,6 +148,8 @@ public class QueryInteractor {
             queryResult.add(row);
         }
 
+        statement.close();
+        resultSet.close();
         ArrayList<ArrayList<String>> readableQueryResult = dataHandlerService.getReadableDataFrom(queryResult, TableType.EMPLOYEES);
         return new ArrayList<>(readableQueryResult.subList(1, readableQueryResult.size()));
     }

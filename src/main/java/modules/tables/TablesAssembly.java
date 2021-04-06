@@ -1,21 +1,19 @@
 package modules.tables;
 
-import application.MainWindow;
-
-import java.sql.Connection;
+import common.DatabaseConnection;
 
 public class TablesAssembly {
-    public static TablesView assemble(MainWindow mainWindow, Connection connection) {
+    public static TablesView assemble() {
         TablesView view = new TablesView();
         TablesPresenter presenter = new TablesPresenter(view);
         TablesInteractor interactor = new TablesInteractor();
-        TablesRouter router = new TablesRouter(mainWindow);
+        TablesRouter router = new TablesRouter();
 
         view.setPresenter(presenter);
         presenter.setInteractor(interactor);
         presenter.setRouter(router);
 
-        interactor.setConnection(connection);
+        interactor.setConnection(DatabaseConnection.getConnection());
 
         return view;
     }

@@ -1,19 +1,17 @@
 package modules.adding;
 
-import modules.tables.entities.EmployeeData;
-
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class AddingPresenter {
-    private SoftReference<AddingView> view;
+    private WeakReference<AddingView> view;
     private AddingInteractor interactor;
     private AddingRouter router;
 
     public AddingPresenter(AddingView view) {
-        this.view = new SoftReference<>(view);
+        this.view = new WeakReference<>(view);
     }
 
     public void setInteractor(AddingInteractor interactor) {
@@ -49,7 +47,7 @@ public class AddingPresenter {
     }
 
     public void backToTablesButtonPressed() {
-        router.showTablesScene(interactor.getConnection());
+        router.showTablesScene();
     }
 
     public void addRowButtonPressed() {

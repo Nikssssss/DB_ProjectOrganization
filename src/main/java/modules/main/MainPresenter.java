@@ -1,15 +1,16 @@
 package modules.main;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class MainPresenter {
-    private SoftReference<MainView> view;
+    private WeakReference<MainView> view;
     private MainInteractor interactor;
     private MainRouter router;
 
     public MainPresenter(MainView view) {
-        this.view = new SoftReference<>(view);
+        this.view = new WeakReference<>(view);
     }
 
     public void setInteractor(MainInteractor interactor) {
@@ -25,10 +26,40 @@ public class MainPresenter {
     }
 
     public void tablesButtonPressed() {
-        router.showTableScene(interactor.getConnection());
+        router.showTableScene();
     }
 
     public void queriesButtonPressed() {
-        router.showQueriesScene(interactor.getConnection());
+        router.showQueriesScene();
+    }
+
+    public void createDatabaseButtonPressed() {
+        try {
+            Objects.requireNonNull(view.get()).disableAllButtons();
+            interactor.initializeDatabase();
+            Objects.requireNonNull(view.get()).enableAllButtons();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 17081) {
+                Objects.requireNonNull(view.get()).setErrorMessage("База данных уже проинициализирована");
+            } else {
+                Objects.requireNonNull(view.get()).setErrorMessage(e.getSQLState());
+            }
+            Objects.requireNonNull(view.get()).enableAllButtons();
+        }
+    }
+
+    public void clearDatabaseButtonPressed() {
+        try {
+            Objects.requireNonNull(view.get()).disableAllButtons();
+            interactor.clearDatabase();
+            Objects.requireNonNull(view.get()).enableAllButtons();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 17081) {
+                Objects.requireNonNull(view.get()).setErrorMessage("База данных уже очищена");
+            } else {
+                Objects.requireNonNull(view.get()).setErrorMessage(e.getSQLState());
+            }
+            Objects.requireNonNull(view.get()).enableAllButtons();
+        }
     }
 }

@@ -1,13 +1,11 @@
 package modules.login;
 
-import application.MainWindow;
-
 public class LoginAssembly {
-    public static LoginView assemble(MainWindow mainWindow) {
+    public static LoginView assemble() {
         LoginView view = new LoginView();
         LoginPresenter presenter = new LoginPresenter(view);
         LoginInteractor interactor = new LoginInteractor();
-        LoginRouter router = new LoginRouter(mainWindow);
+        LoginRouter router = new LoginRouter();
 
         view.setPresenter(presenter);
         presenter.setInteractor(interactor);

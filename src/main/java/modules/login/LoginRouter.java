@@ -1,21 +1,15 @@
 package modules.login;
 
-import application.MainWindow;
+import common.MainWindow;
 import modules.main.MainAssembly;
 import modules.main.MainView;
 
-import java.sql.Connection;
-
 public class LoginRouter {
-    private MainWindow mainWindow;
 
-    public LoginRouter(MainWindow mainWindow) {
-        this.mainWindow = mainWindow;
-    }
-
-    public void showMainScene(Connection connection) {
-        MainView mainView = MainAssembly.assemble(mainWindow, connection);
+    public void showMainScene() {
+        MainView mainView = MainAssembly.assemble();
         mainView.didLoad();
-        mainWindow.showPanel(mainView.getMainPanel());
+        MainWindow.getMainWindow().showPanel(mainView.getMainPanel());
     }
+
 }

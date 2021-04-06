@@ -15,10 +15,6 @@ public class TablesInteractor {
     private ResultSet currentTableResultSet;
     private ResultSetMetaData currentTableResultSetMetaData;
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public void setConnection(Connection connection) {
         this.connection = connection;
         this.dataHandlerService = new DataHandlerService(connection);

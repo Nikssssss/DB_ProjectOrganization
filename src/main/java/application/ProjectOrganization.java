@@ -1,13 +1,14 @@
 package application;
 
+import common.MainWindow;
 import modules.login.LoginAssembly;
 import modules.login.LoginView;
 
 public class ProjectOrganization {
     public void start(){
-        MainWindow mainWindow = new MainWindow();
-        LoginView loginView = LoginAssembly.assemble(mainWindow);
+        MainWindow.createWindow();
+        LoginView loginView = LoginAssembly.assemble();
         loginView.didLoad();
-        mainWindow.showPanel(loginView.getLoginPanel());
+        MainWindow.getMainWindow().showPanel(loginView.getLoginPanel());
     }
 }

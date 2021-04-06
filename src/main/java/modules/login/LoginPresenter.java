@@ -1,16 +1,16 @@
 package modules.login;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.Objects;
 
 public class LoginPresenter {
-    private SoftReference<LoginView> view;
+    private final WeakReference<LoginView> view;
     private LoginInteractor interactor;
     private LoginRouter router;
 
     public LoginPresenter(LoginView view) {
-        this.view = new SoftReference<>(view);
+        this.view = new WeakReference<>(view);
     }
 
     public void setInteractor(LoginInteractor interactor) {
@@ -29,24 +29,24 @@ public class LoginPresenter {
         this.login(ip, port, login, password);
     }
 
+    public void localTemplateButtonPressed() {
+        Objects.requireNonNull(view.get()).setLocalTemplateData();
+    }
+
+    public void remoteTemplateButtonPressed() {
+        Objects.requireNonNull(view.get()).setRemoteTemplateData();
+    }
+
     //MARK: private methods
 
     private void login(String ip, String port, String login, String password){
         try {
             interactor.connect(ip, port, login, password);
+            router.showMainScene();
         } catch (ClassNotFoundException e) {
-            Objects.requireNonNull(view.get()).setErrorMessage("Database is unreachable");
-            return;
+            Objects.requireNonNull(view.get()).setErrorMessage("База данных недоступна");
         } catch (SQLException ex) {
-            Objects.requireNonNull(view.get()).setErrorMessage("Login failed! Please recheck entered data");
-            return;
-        }
-        try {
-            interactor.initializeDatabase();
-            router.showMainScene(interactor.getConnection());
-        } catch (SQLException e) {
-            Objects.requireNonNull(view.get()).setErrorMessage("Error during database initializing");
-            e.printStackTrace();
+            Objects.requireNonNull(view.get()).setErrorMessage("Ошибка авторизации! Пожалуйста, проверьте введённые данные");
         }
     }
 }

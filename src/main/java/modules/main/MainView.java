@@ -1,7 +1,5 @@
 package modules.main;
 
-import application.MainWindow;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,6 +12,8 @@ public class MainView {
     private final JLabel titleLabel = new JLabel("Проектная организация");
     private final JButton tablesButton = new JButton("Изменение данных");
     private final JButton queriesButton = new JButton("Получение информации");
+    private final JButton createDatabaseButton = new JButton("Создать БД");
+    private final JButton clearDatabaseButton = new JButton("Очистить БД");
 
     public void setPresenter(MainPresenter presenter) {
         this.presenter = presenter;
@@ -31,6 +31,24 @@ public class MainView {
         return mainPanel;
     }
 
+    public void setErrorMessage(String errorMessage){
+        JOptionPane.showMessageDialog(mainPanel, errorMessage, "Error!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void disableAllButtons() {
+        tablesButton.setEnabled(false);
+        queriesButton.setEnabled(false);
+        clearDatabaseButton.setEnabled(false);
+        clearDatabaseButton.setEnabled(false);
+    }
+
+    public void enableAllButtons() {
+        tablesButton.setEnabled(true);
+        queriesButton.setEnabled(true);
+        clearDatabaseButton.setEnabled(true);
+        clearDatabaseButton.setEnabled(true);
+    }
+
     //MARK: private methods
 
     private void setupView() {
@@ -43,6 +61,7 @@ public class MainView {
 
     private void setupSubComponents(){
         this.titleLabel.setFont(new Font("Serif", Font.PLAIN, 25));
+
         this.tablesButton.setPreferredSize(new Dimension(200, 100));
         this.tablesButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -50,11 +69,28 @@ public class MainView {
                 presenter.tablesButtonPressed();
             }
         });
+
         this.queriesButton.setPreferredSize(new Dimension(200, 100));
         this.queriesButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 presenter.queriesButtonPressed();
+            }
+        });
+
+        this.createDatabaseButton.setPreferredSize(new Dimension(180, 50));
+        this.createDatabaseButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                presenter.createDatabaseButtonPressed();
+            }
+        });
+
+        this.clearDatabaseButton.setPreferredSize(new Dimension(180, 50));
+        this.clearDatabaseButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                presenter.clearDatabaseButtonPressed();
             }
         });
     }
@@ -78,6 +114,17 @@ public class MainView {
         constraints.insets.top = 20;
         constraints.insets.left = 20;
         this.mainPanel.add(this.queriesButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.insets.top = 20;
+        this.mainPanel.add(this.createDatabaseButton, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.insets.top = 20;
+        constraints.insets.left = 0;
+        this.mainPanel.add(this.clearDatabaseButton, constraints);
     }
 
 }

@@ -1,19 +1,17 @@
 package modules.query;
 
-import modules.query.entities.OrganizationRosterData;
-
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class QueryPresenter {
-    private SoftReference<QueryView> view;
+    private WeakReference<QueryView> view;
     private QueryInteractor interactor;
     private QueryRouter router;
 
     public QueryPresenter(QueryView view) {
-        this.view = new SoftReference<>(view);
+        this.view = new WeakReference<>(view);
     }
 
     public void setInteractor(QueryInteractor interactor) {
@@ -36,7 +34,7 @@ public class QueryPresenter {
     }
 
     public void backToQueriesButtonPressed() {
-        router.showQueriesScene(interactor.getConnection());
+        router.showQueriesScene();
     }
 
     public void executeQueryButtonPressed() {

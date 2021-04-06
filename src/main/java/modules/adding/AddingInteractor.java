@@ -20,10 +20,6 @@ public class AddingInteractor {
         dataHandlerService = new DataHandlerService(connection);
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     public void setResultSet(ResultSet resultSet) {
         this.resultSet = resultSet;
     }

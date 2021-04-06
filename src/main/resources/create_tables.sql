@@ -53,8 +53,8 @@ ALTER TABLE Projects_Contracts
 CREATE TABLE Employees
 (
 	employee_id          NUMBER(4) NOT NULL ,
-	first_name           VARCHAR2(50) NOT NULL ,
-	last_name            VARCHAR2(50) NOT NULL ,
+	first_name           VARCHAR2(150) NOT NULL ,
+	last_name            VARCHAR2(150) NOT NULL ,
 	hire_date            DATE NOT NULL ,
 	profession_id        NUMBER(2) NOT NULL ,
 	salary               NUMBER(6) NOT NULL ,
@@ -121,7 +121,7 @@ ALTER TABLE Managers
 CREATE TABLE Departments
 (
 	department_id        NUMBER(2) NOT NULL ,
-	department_name      VARCHAR2(40) NOT NULL ,
+	department_name      VARCHAR2(150) NOT NULL ,
 	manager_id           NUMBER(4) NULL
 );
 
@@ -168,7 +168,7 @@ ALTER TABLE Technics
 CREATE TABLE Professions
 (
 	profession_id        NUMBER(2) NOT NULL ,
-	profession_name      VARCHAR2(40) NOT NULL ,
+	profession_name      VARCHAR2(150) NOT NULL ,
 	management_ability   NUMBER(1) NOT NULL ,
 	department_id        NUMBER(2) NOT NULL
 );

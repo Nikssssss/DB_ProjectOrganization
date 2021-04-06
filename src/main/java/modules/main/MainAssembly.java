@@ -1,21 +1,19 @@
 package modules.main;
 
-import application.MainWindow;
-
-import java.sql.Connection;
+import common.DatabaseConnection;
 
 public class MainAssembly {
-    public static MainView assemble(MainWindow mainWindow, Connection connection) {
+    public static MainView assemble() {
         MainView view = new MainView();
         MainPresenter presenter = new MainPresenter(view);
         MainInteractor interactor = new MainInteractor();
-        MainRouter router = new MainRouter(mainWindow);
+        MainRouter router = new MainRouter();
 
         view.setPresenter(presenter);
         presenter.setInteractor(interactor);
         presenter.setRouter(router);
 
-        interactor.setConnection(connection);
+        interactor.setConnection(DatabaseConnection.getConnection());
 
         return view;
     }
