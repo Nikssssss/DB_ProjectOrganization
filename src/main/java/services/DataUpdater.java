@@ -1,9 +1,7 @@
 package services;
 
 import common.DatabaseConnection;
-import common.entities.DepartmentData;
-import common.entities.EmployeeData;
-import common.entities.ProfessionData;
+import common.entities.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -47,6 +45,55 @@ public class DataUpdater {
         resultSet.updateString(2, professionData.getProfessionName());
         resultSet.updateInt(3, professionData.getManagementAbility());
         resultSet.updateInt(4, professionData.getDepartmentId());
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateEquipmentRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        EquipmentData equipmentData = DataTransformer.getDatabaseEquipmentExistingRowFrom(rowData);
+        resultSet.absolute(row);
+        resultSet.updateString(2, equipmentData.getEquipmentName());
+        resultSet.updateString(3, equipmentData.getEquipmentType());
+        resultSet.updateInt(4, equipmentData.getDepartmentId());
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateProjectsRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        ProjectData projectData = DataTransformer.getDatabaseProjectExistingRowFrom(rowData);
+        resultSet.absolute(row);
+        resultSet.updateInt(2, projectData.getProjectManager());
+        resultSet.updateInt(3, projectData.getProjectCost());
+        resultSet.updateDate(4, projectData.getStartDate());
+        resultSet.updateDate(5, projectData.getFinishDate());
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateContractsRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        ContractData contractData = DataTransformer.getDatabaseContractExistingRowFrom(rowData);
+        resultSet.absolute(row);
+        resultSet.updateInt(2, contractData.getContractManager());
+        resultSet.updateDate(3, contractData.getStartDate());
+        resultSet.updateDate(4, contractData.getFinishDate());
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateSubcontractsRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        SubcontractData subcontractData = DataTransformer.getDatabaseSubcontractExistingRowFrom(rowData);
+        resultSet.absolute(row);
+        resultSet.updateString(2, subcontractData.getSubcontractorName());
+        resultSet.updateDate(3, subcontractData.getStartDate());
+        resultSet.updateDate(4, subcontractData.getFinishDate());
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateEquipmentTypeRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        EquipmentTypeData equipmentTypeData = DataTransformer.getDatabaseEquipmentTypeExistingRowFrom(rowData);
+        resultSet.absolute(row);
+        resultSet.updateString(2, equipmentTypeData.getEquipmentTypeName());
         resultSet.updateRow();
         connection.commit();
     }

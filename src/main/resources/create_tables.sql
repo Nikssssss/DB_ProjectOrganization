@@ -132,7 +132,7 @@ CREATE TABLE Equipment
 (
 	equipment_id         NUMBER(3) NOT NULL ,
 	department_id        NUMBER(2) NULL ,
-	equipment_type       VARCHAR2(20) NULL ,
+	equipment_type_id    NUMBER(3) NULL ,
 	equipment_name       VARCHAR2(40) NOT NULL
 );
 
@@ -150,16 +150,17 @@ ALTER TABLE Equipment_Projects
 
 CREATE TABLE EquipmentType
 (
-	equipment_type       VARCHAR2(20) NOT NULL
+    equipment_type_id         NUMBER(3),
+	equipment_type_name       VARCHAR2(60) NOT NULL
 );
 
 ALTER TABLE EquipmentType
-	ADD CONSTRAINT  XPKEquipmentType PRIMARY KEY (equipment_type);
+	ADD CONSTRAINT  XPKEquipmentType PRIMARY KEY (equipment_type_id);
 
 CREATE TABLE Technics
 (
 	employee_id          NUMBER(4) NOT NULL ,
-	equipment_type       VARCHAR2(20) NOT NULL
+	equipment_type_id    NUMBER(3) NOT NULL
 );
 
 ALTER TABLE Technics
@@ -231,7 +232,7 @@ ALTER TABLE Equipment
 	ADD (CONSTRAINT R_27 FOREIGN KEY (department_id) REFERENCES Departments (department_id) ON DELETE SET NULL);
 
 ALTER TABLE Equipment
-	ADD (CONSTRAINT R_14 FOREIGN KEY (equipment_type) REFERENCES EquipmentType (equipment_type) ON DELETE SET NULL);
+	ADD (CONSTRAINT R_14 FOREIGN KEY (equipment_type_id) REFERENCES EquipmentType (equipment_type_id) ON DELETE CASCADE);
 
 ALTER TABLE Equipment_Projects
 	ADD (CONSTRAINT R_31 FOREIGN KEY (equipment_id) REFERENCES Equipment (equipment_id));
@@ -243,4 +244,4 @@ ALTER TABLE Technics
 	ADD (CONSTRAINT R_19 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id) ON DELETE CASCADE);
 
 ALTER TABLE Technics
-	ADD (CONSTRAINT R_25 FOREIGN KEY (equipment_type) REFERENCES EquipmentType (equipment_type) ON DELETE SET NULL);
+	ADD (CONSTRAINT R_25 FOREIGN KEY (equipment_type_id) REFERENCES EquipmentType (equipment_type_id) ON DELETE SET NULL);

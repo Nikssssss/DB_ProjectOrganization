@@ -140,11 +140,29 @@ public class QueriesExecutor {
         return professions;
     }
 
+    public static ArrayList<String> getAllEquipmentTypes() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select equipment_type_name from EquipmentType";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> equipmentTypes = new ArrayList<>();
+        while (resultSet.next()) {
+            equipmentTypes.add(resultSet.getString(1));
+        }
+        resultSet.close();
+        statement.close();
+        return equipmentTypes;
+    }
+
     public static String getAllColumnNamesOfTable(TableType tableType) {
         switch (tableType) {
             case EMPLOYEES: return "employee_id, first_name, last_name, hire_date, profession_id, salary, age";
             case DEPARTMENTS: return "department_id, department_name, manager_id";
             case PROFESSIONS: return "profession_id, profession_name, management_ability, department_id";
+            case EQUIPMENT: return "equipment_id, equipment_name, equipment_type_id, department_id";
+            case PROJECTS: return "project_id, project_manager, project_cost, start_date, finish_date";
+            case CONTRACTS: return "contract_id, contract_manager, start_date, finish_date";
+            case SUBCONTRACTS: return "subcontract_id, subcontractor_name, start_date, finish_date";
+            case EQUIPMENTTYPE: return "equipment_type_id, equipment_type_name";
             default: return "";
         }
     }
@@ -185,6 +203,17 @@ public class QueriesExecutor {
         return result;
     }
 
+    public static String getEquipmentTypeNameBy(String equipmentId) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select equipment_type_name from equipmentType where equipment_type_id = " + equipmentId;
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
+    }
+
     public static String getProfessionIdBy(String professionName) throws SQLException {
         Statement statement = connection.createStatement();
         String query = "select profession_id from professions where profession_name = '" + professionName + "'";
@@ -199,6 +228,17 @@ public class QueriesExecutor {
     public static String getDepartmentIdBy(String departmentName) throws SQLException {
         Statement statement = connection.createStatement();
         String query = "select department_id from departments where department_name = '" + departmentName + "'";
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
+    }
+
+    public static String getEquipmentTypeIdBy(String equipmentType) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select equipment_type_id from equipmentType where equipment_type_name = '" + equipmentType + "'";
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.next();
         String result = resultSet.getString(1);

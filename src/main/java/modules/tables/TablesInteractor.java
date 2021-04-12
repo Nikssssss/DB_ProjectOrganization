@@ -51,6 +51,26 @@ public class TablesInteractor {
                 resultData = DataTransformer.getReadableColumnsAndRowsForProfessions(resultData);
                 break;
             }
+            case EQUIPMENT: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForEquipment(resultData);
+                break;
+            }
+            case PROJECTS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForProjects(resultData);
+                break;
+            }
+            case CONTRACTS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForContracts(resultData);
+                break;
+            }
+            case SUBCONTRACTS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForSubcontracts(resultData);
+                break;
+            }
+            case EQUIPMENTTYPE: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForEquipmentType(resultData);
+                break;
+            }
         }
 
         return resultData;
@@ -64,7 +84,9 @@ public class TablesInteractor {
                 dropDownListData.add(professions);
                 return dropDownListData;
             }
-            case DEPARTMENTS: {
+            case DEPARTMENTS:
+            case CONTRACTS:
+            case PROJECTS: {
                 ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
                 ArrayList<String> managers = DataTransformer.getReadableManagerIDs();
                 dropDownListData.add(managers);
@@ -75,6 +97,14 @@ public class TablesInteractor {
                 ArrayList<String> managementAbilities = DataTransformer.getReadableManagerAbilities();
                 ArrayList<String> departments = DataTransformer.getReadableDepartmentIDs();
                 dropDownListData.add(managementAbilities);
+                dropDownListData.add(departments);
+                return dropDownListData;
+            }
+            case EQUIPMENT: {
+                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
+                ArrayList<String> departments = DataTransformer.getReadableDepartmentIDs();
+                ArrayList<String> equipmentTypes = QueriesExecutor.getAllEquipmentTypes();
+                dropDownListData.add(equipmentTypes);
                 dropDownListData.add(departments);
                 return dropDownListData;
             }
@@ -96,6 +126,26 @@ public class TablesInteractor {
             }
             case PROFESSIONS: {
                 DataUpdater.updateProfessionsRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case EQUIPMENT: {
+                DataUpdater.updateEquipmentRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case PROJECTS: {
+                DataUpdater.updateProjectsRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case CONTRACTS: {
+                DataUpdater.updateContractsRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case SUBCONTRACTS: {
+                DataUpdater.updateSubcontractsRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case EQUIPMENTTYPE: {
+                DataUpdater.updateEquipmentTypeRow(row, rowData, currentTableResultSet);
                 break;
             }
         }

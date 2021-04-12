@@ -50,9 +50,10 @@ public class MainPresenter {
             Objects.requireNonNull(view.get()).enableAllButtons();
         } catch (SQLException e) {
             if (e.getErrorCode() == 17081) {
+                e.printStackTrace();
                 Objects.requireNonNull(view.get()).setErrorMessage("База данных уже проинициализирована");
             } else {
-                Objects.requireNonNull(view.get()).setErrorMessage(e.getSQLState());
+                Objects.requireNonNull(view.get()).setErrorMessage(e.getMessage());
             }
             Objects.requireNonNull(view.get()).enableAllButtons();
         }

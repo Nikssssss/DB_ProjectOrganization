@@ -60,3 +60,12 @@ create or replace trigger subcontracts_increment
     select subcontracts_sequence.nextval into :new.subcontract_id from dual;
   end if;
 end;
+
+create or replace trigger equipment_type_increment
+  before insert on equipmentType
+  for each row
+ begin
+  if :new.equipment_type_id is null then
+    select equipment_type_sequence.nextval into :new.equipment_type_id from dual;
+  end if;
+end;
