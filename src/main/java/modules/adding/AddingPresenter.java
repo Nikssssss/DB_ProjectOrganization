@@ -1,9 +1,11 @@
 package modules.adding;
 
+import modules.tables.enums.TableType;
+
 import java.lang.ref.WeakReference;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class AddingPresenter {
     private final WeakReference<AddingView> view;
@@ -23,11 +25,33 @@ public class AddingPresenter {
     }
 
     public void viewDidLoad() {
+        AddingView addingView = view.get();
+        assert addingView != null;
         try {
             ArrayList<ArrayList<String>> columnsDropDownListData = interactor.getColumnsDropDownListData();
-            Objects.requireNonNull(this.view.get()).configureView(interactor.getCurrentTableType(), columnsDropDownListData);
+            if (interactor.getCurrentTableType() == TableType.PROJECTS) {
+                Boolean isOwnOrganization;
+                while ((isOwnOrganization = addingView.chooseOrganizationForProject()) == null) {}
+                Boolean isNewProject;
+                while ((isNewProject = addingView.chooseProject()) == null) {}
+                addingView.configureProjectsView(columnsDropDownListData, isOwnOrganization, isNewProject);
+            } else {
+                addingView.configureView(interactor.getCurrentTableType(), columnsDropDownListData);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void employeeCategoryDidChange() {
+        AddingView addingView = view.get();
+        assert addingView != null;
+        try {
+            String category = addingView.getEmployeeCategory();
+            ArrayList<String> categoryDropDownListData = interactor.getEmployeeCategoryDropDownListData(category);
+            addingView.changeEmployeeCategoryTo(category, categoryDropDownListData);
+        } catch (SQLException e) {
+            addingView.setErrorMessage(e.getMessage());
         }
     }
 
@@ -42,13 +66,49 @@ public class AddingPresenter {
         if (viewHasBlankFields) {
             addingView.setErrorMessage("Пожалуйста, заполните все поля");
         } else {
-            ArrayList<String> insertingData = addingView.getAllInsertingData();
-            try {
-                interactor.insertRow(insertingData);
-                addingView.clearAllFields();
-            } catch (SQLException | IllegalArgumentException e) {
-                e.printStackTrace();
-                addingView.setErrorMessage("Пожалуйста, введите корректные значения");
+            if (interactor.getCurrentTableType() == TableType.PROJECTS) {
+                ArrayList<Object> insertingData = addingView.getAllProjectsInsertingData();
+                boolean isOwnOrganization = addingView.isOwnProjectOrganization();
+                boolean isNewProject;
+                if (isOwnOrganization) {
+                    if (insertingData.size() == 7) {
+                        isNewProject = true;
+                    } else {
+                        isNewProject = false;
+                    }
+                } else {
+                    if (insertingData.size() == 5) {
+                        isNewProject = true;
+                    } else {
+                        isNewProject = false;
+                    }
+                }
+                try {
+                    interactor.insertProjectRow(insertingData, isOwnOrganization, isNewProject);
+                    addingView.clearAllFields();
+                } catch (SQLException | DateTimeException e) {
+                    e.printStackTrace();
+                    addingView.setErrorMessage(e.getMessage());
+                }
+            } else if (interactor.getCurrentTableType() == TableType.EMPLOYEES){
+                try {
+                    ArrayList<String> insertingData = addingView.getAllInsertingData();
+                    String employeeCategory = addingView.getEmployeeCategory();
+                    interactor.insertRow(insertingData, employeeCategory);
+                    addingView.clearAllFields();
+                } catch (SQLException | IllegalArgumentException e) {
+                    e.printStackTrace();
+                    addingView.setErrorMessage("Пожалуйста, введите корректные значения \n" + e.getMessage());
+                }
+            } else {
+                try {
+                    ArrayList<String> insertingData = addingView.getAllInsertingData();
+                    interactor.insertRow(insertingData, null);
+                    addingView.clearAllFields();
+                } catch (SQLException | DateTimeException | IllegalArgumentException e) {
+                    e.printStackTrace();
+                    addingView.setErrorMessage("Пожалуйста, введите корректные значения \n" + e.getMessage());
+                }
             }
         }
     }

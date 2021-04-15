@@ -113,18 +113,100 @@ public class QueriesExecutor {
         return professions;
     }
 
+    public static ArrayList<String> getAllProjectIDs() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select project_id from projects";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> projectIDs = new ArrayList<>();
+        while (resultSet.next()) {
+            projectIDs.add(resultSet.getString(1));
+        }
+        resultSet.close();
+        statement.close();
+        return projectIDs;
+    }
+
+    public static ArrayList<String> getAllContractIDs() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select contract_id from contracts";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> contractIDs = new ArrayList<>();
+        while (resultSet.next()) {
+            contractIDs.add(resultSet.getString(1));
+        }
+        resultSet.close();
+        statement.close();
+        return contractIDs;
+    }
+
+    public static ArrayList<String> getAllSubcontractIDs() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select subcontract_id from subcontracts";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> subcontractIDs = new ArrayList<>();
+        while (resultSet.next()) {
+            subcontractIDs.add(resultSet.getString(1));
+        }
+        resultSet.close();
+        statement.close();
+        return subcontractIDs;
+    }
+
     public static ArrayList<String> getAllManagers() throws SQLException {
         Statement statement = connection.createStatement();
         String query = "select employee_id, first_name, last_name from employees";
         ResultSet resultSet = statement.executeQuery(query);
-        ArrayList<String> professions = new ArrayList<>();
-        professions.add("-");
+        ArrayList<String> managers = new ArrayList<>();
+        managers.add("-");
         while (resultSet.next()) {
-            professions.add(resultSet.getString(1) + ": " + resultSet.getString(2) + " " + resultSet.getString(3));
+            managers.add(resultSet.getString(1) + ": " + resultSet.getString(2) + " " + resultSet.getString(3));
         }
         resultSet.close();
         statement.close();
-        return professions;
+        return managers;
+    }
+
+    public static ArrayList<String> getAllEmployees() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select employee_id, first_name, last_name from employees";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> employees = new ArrayList<>();
+        while (resultSet.next()) {
+            employees.add(resultSet.getString(1) + ": " + resultSet.getString(2) + " " + resultSet.getString(3));
+        }
+        resultSet.close();
+        statement.close();
+        return employees;
+    }
+
+    public static ArrayList<String> getAllUnusedEquipment() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select equipment_id, equipment_name from equipment" +
+                " where equipment_id not in " +
+                "(select equipment_id from equipment_projects group by equipment_id)";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> equipment = new ArrayList<>();
+        while (resultSet.next()) {
+            equipment.add(resultSet.getString(1) + ": " + resultSet.getString(2));
+        }
+        resultSet.close();
+        statement.close();
+        return equipment;
+    }
+
+    public static ArrayList<String> getAllProjectAndContractManagers() throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select employee_id, first_name, last_name from employees " +
+                "inner join professions using(profession_id)" +
+                " where management_ability = 1";
+        ResultSet resultSet = statement.executeQuery(query);
+        ArrayList<String> managers = new ArrayList<>();
+        while (resultSet.next()) {
+            managers.add(resultSet.getString(1) + ": " + resultSet.getString(2) + " " + resultSet.getString(3));
+        }
+        resultSet.close();
+        statement.close();
+        return managers;
     }
 
     public static ArrayList<String> getAllDepartments() throws SQLException {

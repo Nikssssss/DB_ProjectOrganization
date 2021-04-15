@@ -187,31 +187,31 @@ ALTER TABLE Projects
 	ADD (CONSTRAINT R_28 FOREIGN KEY (project_manager) REFERENCES Employees (employee_id) ON DELETE SET NULL);
 
 ALTER TABLE Subcontracts_Projects
-	ADD (CONSTRAINT R_3 FOREIGN KEY (project_id) REFERENCES Projects (project_id));
+	ADD (CONSTRAINT R_3 FOREIGN KEY (project_id) REFERENCES Projects (project_id) ON DELETE CASCADE);
 
 ALTER TABLE Subcontracts_Projects
-	ADD (CONSTRAINT R_2 FOREIGN KEY (subcontract_id) REFERENCES Subcontracts (subcontract_id));
+	ADD (CONSTRAINT R_2 FOREIGN KEY (subcontract_id) REFERENCES Subcontracts (subcontract_id) ON DELETE CASCADE);
 
 ALTER TABLE Projects_Contracts
-	ADD (CONSTRAINT R_5 FOREIGN KEY (project_id) REFERENCES Projects (project_id));
+	ADD (CONSTRAINT R_5 FOREIGN KEY (project_id) REFERENCES Projects (project_id) ON DELETE CASCADE);
 
 ALTER TABLE Projects_Contracts
-	ADD (CONSTRAINT R_6 FOREIGN KEY (contract_id) REFERENCES Contracts (contract_id));
+	ADD (CONSTRAINT R_6 FOREIGN KEY (contract_id) REFERENCES Contracts (contract_id) ON DELETE CASCADE);
 
 ALTER TABLE Employees
 	ADD (CONSTRAINT R_24 FOREIGN KEY (profession_id) REFERENCES Professions (profession_id) ON DELETE CASCADE);
 
 ALTER TABLE Projects_Employees
-	ADD (CONSTRAINT R_9 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id));
+	ADD (CONSTRAINT R_9 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id) ON DELETE CASCADE);
 
 ALTER TABLE Projects_Employees
-	ADD (CONSTRAINT R_8 FOREIGN KEY (project_id) REFERENCES Projects (project_id));
+	ADD (CONSTRAINT R_8 FOREIGN KEY (project_id) REFERENCES Projects (project_id) ON DELETE CASCADE);
 
 ALTER TABLE Employees_Contracts
-	ADD (CONSTRAINT R_11 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id));
+	ADD (CONSTRAINT R_11 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id) ON DELETE CASCADE);
 
 ALTER TABLE Employees_Contracts
-	ADD (CONSTRAINT R_12 FOREIGN KEY (contract_id) REFERENCES Contracts (contract_id));
+	ADD (CONSTRAINT R_12 FOREIGN KEY (contract_id) REFERENCES Contracts (contract_id) ON DELETE CASCADE);
 
 ALTER TABLE Engineers
 	ADD (CONSTRAINT R_20 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id) ON DELETE CASCADE);
@@ -235,10 +235,10 @@ ALTER TABLE Equipment
 	ADD (CONSTRAINT R_14 FOREIGN KEY (equipment_type_id) REFERENCES EquipmentType (equipment_type_id) ON DELETE CASCADE);
 
 ALTER TABLE Equipment_Projects
-	ADD (CONSTRAINT R_31 FOREIGN KEY (equipment_id) REFERENCES Equipment (equipment_id));
+	ADD (CONSTRAINT R_31 FOREIGN KEY (equipment_id) REFERENCES Equipment (equipment_id) ON DELETE CASCADE);
 
 ALTER TABLE Equipment_Projects
-	ADD (CONSTRAINT R_32 FOREIGN KEY (project_id) REFERENCES Projects (project_id));
+	ADD (CONSTRAINT R_32 FOREIGN KEY (project_id) REFERENCES Projects (project_id) ON DELETE CASCADE);
 
 ALTER TABLE Technics
 	ADD (CONSTRAINT R_19 FOREIGN KEY (employee_id) REFERENCES Employees (employee_id) ON DELETE CASCADE);

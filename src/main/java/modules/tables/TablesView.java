@@ -142,7 +142,6 @@ public class TablesView {
 
         this.entitiesComboBox.addItem("Сотрудники");
         this.entitiesComboBox.addItem("Отделы");
-        this.entitiesComboBox.addItem("Профессии");
         this.entitiesComboBox.addItem("Оборудование");
         this.entitiesComboBox.addItem("Типы оборудования");
         this.entitiesComboBox.addItem("Проекты");

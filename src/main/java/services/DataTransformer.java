@@ -18,6 +18,14 @@ public class DataTransformer {
         return QueriesExecutor.getAllManagers();
     }
 
+    public static ArrayList<String> getReadableProjectAndContractManagerIDs() throws SQLException {
+        return QueriesExecutor.getAllProjectAndContractManagers();
+    }
+
+    public static ArrayList<String> getReadableEmployeeIDs() throws SQLException {
+        return QueriesExecutor.getAllEmployees();
+    }
+
     public static ArrayList<String> getReadableDepartmentIDs() throws SQLException {
         return QueriesExecutor.getAllDepartments();
     }
@@ -31,6 +39,10 @@ public class DataTransformer {
 
     public static ArrayList<String> getReadableEquipmentTypeIDs() throws SQLException {
         return QueriesExecutor.getAllEquipmentTypes();
+    }
+
+    public static ArrayList<String> getReadableUnusedEquipmentIDs() throws SQLException {
+        return QueriesExecutor.getAllUnusedEquipment();
     }
 
     public static ArrayList<ArrayList<String>> getReadableColumnsAndRowsForEmployees(ArrayList<ArrayList<String>> databaseData) throws SQLException {
@@ -200,7 +212,7 @@ public class DataTransformer {
         readableRowData.set(3, getDatabaseDepartmentIdBy(readableRowData.get(3)));
         return new EquipmentData(Integer.parseInt(readableRowData.get(0)),
                 readableRowData.get(1),
-                readableRowData.get(2),
+                Integer.parseInt(readableRowData.get(2)),
                 Integer.parseInt(readableRowData.get(3)));
     }
 
@@ -260,8 +272,62 @@ public class DataTransformer {
                 Integer.parseInt(readableRowData.get(2)));
     }
 
+    public static EquipmentTypeData getDatabaseEquipmentTypeInsertingRowFrom(ArrayList<String> readableRowData) throws SQLException {
+        return new EquipmentTypeData(null,
+                readableRowData.get(0));
+    }
+
+    public static EquipmentData getDatabaseEquipmentInsertingRowFrom(ArrayList<String> readableRowData) throws SQLException {
+        readableRowData.set(1, getDatabaseEquipmentTypeIdBy(readableRowData.get(1)));
+        readableRowData.set(2, getDatabaseDepartmentIdBy(readableRowData.get(2)));
+        return new EquipmentData(null,
+                readableRowData.get(0),
+                Integer.parseInt(readableRowData.get(1)),
+                Integer.parseInt(readableRowData.get(2)));
+    }
+
+    public static ContractData getDatabaseContractInsertingRowFrom(ArrayList<String> readableRowData) throws SQLException {
+        readableRowData.set(0, getDatabaseManagerIdBy(readableRowData.get(0)));
+        return new ContractData(null,
+                Integer.parseInt(readableRowData.get(0)),
+                Date.valueOf(readableRowData.get(1)),
+                Date.valueOf(readableRowData.get(2)));
+    }
+
+    public static InsertingProjectData getDatabaseInsertingProjectContractRowFrom(ArrayList<Object> readableRowData) {
+        Integer contractId = Integer.parseInt((String) readableRowData.get(0));
+        Integer managerId = Integer.parseInt(DataTransformer.getDatabaseManagerIdBy((String)readableRowData.get(1)));
+        ArrayList<Integer> employees = new ArrayList<>();
+        for (String employee: (ArrayList<String>) readableRowData.get(2)) {
+            employees.add(Integer.parseInt(getDatabaseManagerIdBy(employee)));
+        }
+        ArrayList<Integer> equipment = new ArrayList<>();
+        for (String equipmentElement: (ArrayList<String>) readableRowData.get(3)) {
+            equipment.add(Integer.parseInt(getDatabaseEquipmentIdBy(equipmentElement)));
+        }
+        Integer projectCost = Integer.parseInt((String) readableRowData.get(4));
+        Date startDate = Date.valueOf((String) readableRowData.get(5));
+        Date finishDate = Date.valueOf((String) readableRowData.get(6));
+        return new InsertingProjectData(null, contractId, managerId, employees, equipment,
+                projectCost, startDate, finishDate);
+    }
+
+    public static InsertingProjectData getDatabaseInsertingProjectSubcontractRowFrom(ArrayList<Object> readableRowData) {
+        Integer contractId = Integer.parseInt((String) readableRowData.get(0));
+        Integer managerId = Integer.parseInt(DataTransformer.getDatabaseManagerIdBy((String)readableRowData.get(1)));
+        Integer projectCost = Integer.parseInt((String) readableRowData.get(2));
+        Date startDate = Date.valueOf((String) readableRowData.get(3));
+        Date finishDate = Date.valueOf((String) readableRowData.get(4));
+        return new InsertingProjectData(null, contractId, managerId, null, null,
+                projectCost, startDate, finishDate);
+    }
+
     public static String getDatabaseProfessionIdBy(String professionName) throws SQLException {
         return QueriesExecutor.getProfessionIdBy(professionName);
+    }
+
+    public static String getDatabaseEquipmentTypeIdBy(String equipmentType) throws SQLException {
+        return QueriesExecutor.getEquipmentTypeIdBy(equipmentType);
     }
 
     //MARK: private methods
@@ -298,8 +364,8 @@ public class DataTransformer {
         return managementAbility.equals("Да") ? "1" : "0";
     }
 
-    private static String getDatabaseEquipmentTypeIdBy(String equipmentType) throws SQLException {
-        return QueriesExecutor.getEquipmentTypeIdBy(equipmentType);
+    private static String getDatabaseEquipmentIdBy(String readableEquipment) {
+        return readableEquipment.substring(0, readableEquipment.indexOf(":"));
     }
 
 }

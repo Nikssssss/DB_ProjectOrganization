@@ -55,6 +55,7 @@ public class TablesPresenter {
             ArrayList<ArrayList<String>> currentTableData = this.interactor.getColumnsAndRowsFromCurrentTable(currentTableType);
             Objects.requireNonNull(view.get()).setTableRowsData(currentTableData.subList(1, currentTableData.size()));
         } catch (SQLException e) {
+            e.printStackTrace();
             Objects.requireNonNull(view.get()).setErrorMessage(e.getMessage());
         }
     }
