@@ -1,5 +1,7 @@
 package modules.tables;
 
+import common.CurrentUserRole;
+import modules.roles.enums.UserRole;
 import modules.tables.enums.TableType;
 
 import javax.swing.*;
@@ -24,6 +26,7 @@ public class TablesView {
     private JScrollPane entityScrollPane;
     private final JButton backButton = new JButton("Назад в меню");
     private final JComboBox<String> entitiesComboBox = new JComboBox<>();
+    private final ArrayList<String> entities = new ArrayList<>();
     private final JButton addRowButton = new JButton("Добавить запись");
 
     private final TableModelListener tableModelListener = new TableModelListener() {
@@ -62,6 +65,10 @@ public class TablesView {
             this.entityTableModel.addRow(row.toArray());
         }
         this.entityTable.clearSelection();
+    }
+
+    public void setEntities(ArrayList<String> entities) {
+        this.entities.addAll(entities);
     }
 
     public String getCurrentTableName() {
@@ -110,6 +117,17 @@ public class TablesView {
                 this.setTableModelForEquipmentProjects(columnNames);
                 break;
             }
+            case TECHNICS: {
+                this.setTableModelForTechnics(columnNames, dropDownListsData);
+                break;
+            }
+            case MANAGERS:
+            case ACCOUNTANTS:
+            case CONSTRUCTORS:
+            case ENGINEERS: {
+                this.setTableModelForEmployeeCategory(columnNames);
+                break;
+            }
         }
     }
 
@@ -119,6 +137,9 @@ public class TablesView {
         for (int i = 0; i < dataRow.size() - 1; i++) {
             requiredDataRow.add(dataRow.get(i));
         }
+        if (TableType.valueOfLabel(getCurrentTableName()).ordinal() > 9) {
+            requiredDataRow.add(dataRow.get(dataRow.size() - 1));
+        }
         return requiredDataRow;
     }
 
@@ -127,7 +148,7 @@ public class TablesView {
     private void setupView() {
         this.tablePanel.setBackground(Color.LIGHT_GRAY);
         this.tablePanel.setLayout(new GridBagLayout());
-        this.tablePanel.setPreferredSize(new Dimension(800, 800));
+        this.tablePanel.setPreferredSize(new Dimension(1000, 850));
         this.setupSubComponents();
         this.placeSubComponents();
     }
@@ -148,15 +169,9 @@ public class TablesView {
             }
         });
 
-        this.entitiesComboBox.addItem("Сотрудники");
-        this.entitiesComboBox.addItem("Отделы");
-        this.entitiesComboBox.addItem("Оборудование");
-        this.entitiesComboBox.addItem("Типы оборудования");
-        this.entitiesComboBox.addItem("Проекты");
-        this.entitiesComboBox.addItem("Договоры");
-        this.entitiesComboBox.addItem("Субдоговоры");
-        this.entitiesComboBox.addItem("Исполнители проектов");
-        this.entitiesComboBox.addItem("Оборудование на проектах");
+        for (String entity: entities) {
+            this.entitiesComboBox.addItem(entity);
+        }
         this.entitiesComboBox.addActionListener(e -> presenter.comboBoxItemChanged());
     }
 
@@ -165,7 +180,7 @@ public class TablesView {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.insets.right = 130;
+        constraints.insets.right = 205;
         this.tablePanel.add(this.backButton, constraints);
 
         constraints.gridx = 1;
@@ -175,7 +190,7 @@ public class TablesView {
 
         constraints.gridx = 2;
         constraints.gridy = 0;
-        constraints.insets.left = 130;
+        constraints.insets.left = 205;
         this.tablePanel.add(this.addRowButton, constraints);
     }
 
@@ -188,8 +203,8 @@ public class TablesView {
         this.entityTableModel = new ColumnEditableTableModel();
         this.entityTable = new JTable(this.entityTableModel);
         this.entityScrollPane = new JScrollPane(this.entityTable);
-        this.entityTable.setPreferredSize(new Dimension(750, 750));
-        this.entityScrollPane.setPreferredSize(new Dimension(750, 700));
+        this.entityTable.setPreferredSize(new Dimension(950, 750));
+        this.entityScrollPane.setPreferredSize(new Dimension(950, 750));
         this.entityScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Записи",
                 TitledBorder.CENTER,
@@ -209,7 +224,9 @@ public class TablesView {
 
     private void setTableModelForEmployees(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4, 5, 6});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 5, 6});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -245,11 +262,15 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForDepartments(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -285,11 +306,15 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForProfessions(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -333,11 +358,15 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForEquipment(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -381,11 +410,15 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForProjects(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3, 5});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3, 5});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -421,11 +454,15 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForContracts(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -461,11 +498,15 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForSubcontracts(ArrayList<String> columnNames) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -493,11 +534,15 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForEquipmentType(ArrayList<String> columnNames) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1});
+        if (CurrentUserRole.getUserRole() != UserRole.ADMIN) {
+            this.entityTableModel.addAllEditableColumns(new Integer[]{1});
+        }
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -525,6 +570,8 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForProjectsEmployees(ArrayList<String> columnNames) {
@@ -556,6 +603,8 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
     }
 
     private void setTableModelForEquipmentProjects(ArrayList<String> columnNames) {
@@ -587,6 +636,41 @@ public class TablesView {
         });
 
         this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(true);
+    }
+
+    private void setTableModelForTechnics(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
+        this.reinitializeTable();
+        for (String columnName: columnNames) {
+            this.entityTableModel.addColumn(columnName);
+        }
+
+        this.entityTableModel.addAllEditableColumns(new Integer[]{1});
+
+        TableColumn equipmentTypeColumn = this.entityTable.getColumnModel().getColumn(1);
+        JComboBox<String> equipmentTypesComboBox = new JComboBox<>();
+        ArrayList<String> equipmentTypes = dropDownListsData.get(0);
+        for (String manager: equipmentTypes) {
+            equipmentTypesComboBox.addItem(manager);
+        }
+        equipmentTypeColumn.setCellEditor(new DefaultCellEditor(equipmentTypesComboBox));
+
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(false);
+    }
+
+    private void setTableModelForEmployeeCategory(ArrayList<String> columnNames) {
+        this.reinitializeTable();
+        for (String columnName: columnNames) {
+            this.entityTableModel.addColumn(columnName);
+        }
+
+        this.entityTableModel.addAllEditableColumns(new Integer[]{1});
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
+
+        addRowButton.setVisible(false);
     }
 
 }

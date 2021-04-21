@@ -1,5 +1,8 @@
 package modules.login;
 
+import common.CurrentUserRole;
+import modules.roles.enums.UserRole;
+
 import java.lang.ref.WeakReference;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -41,8 +44,14 @@ public class LoginPresenter {
 
     private void login(String ip, String port, String login, String password){
         try {
+            UserRole currentUserRole = UserRole.valueOfLabel(Objects.requireNonNull(view.get()).getUserRole());
+            if (currentUserRole == null) {
+                Objects.requireNonNull(view.get()).setErrorMessage("Пожалуйста, выберите роль пользователя");
+                return;
+            }
             interactor.connect(ip, port, login, password);
-            router.showMainScene();
+            CurrentUserRole.setUserRole(currentUserRole);
+            router.showUserRoleScene();
         } catch (ClassNotFoundException e) {
             Objects.requireNonNull(view.get()).setErrorMessage("База данных недоступна");
         } catch (SQLException ex) {

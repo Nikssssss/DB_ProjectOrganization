@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class LoginView {
     private LoginPresenter presenter;
@@ -15,13 +16,18 @@ public class LoginView {
     private final JButton loginButton = new JButton("Войти");
     private final JButton localTemplateButton = new JButton("Локальная БД");
     private final JButton remoteTemplateButton = new JButton("Удалённая БД");
+    private final ButtonGroup userRoleButtonGroup = new ButtonGroup();
+    private final JRadioButton directorRadioButton = new JRadioButton("Директор");
+    private final JRadioButton managerRadioButton = new JRadioButton("Управляющий");
+    private final JRadioButton hrRadioButton = new JRadioButton("HR");
+    private final JRadioButton adminRadioButton = new JRadioButton("Админ");
 
     public void setPresenter(LoginPresenter presenter) {
         this.presenter = presenter;
     }
 
     public void setErrorMessage(String errorMessage){
-        JOptionPane.showMessageDialog(loginPanel, errorMessage, "Error!", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(loginPanel, errorMessage, "Ошибка!", JOptionPane.ERROR_MESSAGE);
     }
 
     public JPanel getLoginPanel(){
@@ -64,10 +70,20 @@ public class LoginView {
         }
     }
 
+    public String getUserRole() {
+        for (Enumeration<AbstractButton> buttons = userRoleButtonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+        return null;
+    }
+
     //MARK: private methods
 
     private void setupView() {
-        loginPanel.setPreferredSize(new Dimension(400, 400));
+        loginPanel.setPreferredSize(new Dimension(550, 550));
         loginPanel.setLayout(new GridBagLayout());
         loginPanel.setBackground(Color.LIGHT_GRAY);
         this.setupSubComponents();
@@ -118,6 +134,15 @@ public class LoginView {
                 presenter.remoteTemplateButtonPressed();
             }
         });
+
+        directorRadioButton.setActionCommand("Директор");
+        managerRadioButton.setActionCommand("Управляющий");
+        hrRadioButton.setActionCommand("HR");
+        adminRadioButton.setActionCommand("Админ");
+        userRoleButtonGroup.add(directorRadioButton);
+        userRoleButtonGroup.add(managerRadioButton);
+        userRoleButtonGroup.add(hrRadioButton);
+        userRoleButtonGroup.add(adminRadioButton);
     }
 
     private void placeSubComponents() {
@@ -148,8 +173,25 @@ public class LoginView {
             currentLabelGridY += 2;
             currentTextFieldGridY += 2;
         }
+        int lastTextFieldGridY = 2 * fieldTextFields.size();
 
-        constraints.gridy = 2 * fieldTextFields.size() + 1;
+        constraints.gridy = lastTextFieldGridY + 1;
+        constraints.insets.top = 20;
+        loginPanel.add(directorRadioButton, constraints);
+
+        constraints.gridy = lastTextFieldGridY + 2;
+        constraints.insets.top = 10;
+        loginPanel.add(managerRadioButton, constraints);
+
+        constraints.gridy = lastTextFieldGridY + 3;
+        constraints.insets.top = 10;
+        loginPanel.add(hrRadioButton, constraints);
+
+        constraints.gridy = lastTextFieldGridY + 4;
+        constraints.insets.top = 10;
+        loginPanel.add(adminRadioButton, constraints);
+
+        constraints.gridy = lastTextFieldGridY + 5;
         constraints.insets.top = 30;
         loginPanel.add(loginButton, constraints);
     }

@@ -5,6 +5,8 @@ import modules.adding.AddingAssembly;
 import modules.adding.AddingView;
 import modules.main.MainAssembly;
 import modules.main.MainView;
+import modules.roles.RolesAssembly;
+import modules.roles.views.UserRoleView;
 import modules.tables.enums.TableType;
 
 import java.sql.ResultSet;
@@ -12,9 +14,9 @@ import java.sql.ResultSet;
 public class TablesRouter {
 
     public void showMainScene() {
-        MainView mainView = MainAssembly.assemble();
-        mainView.didLoad();
-        MainWindow.getMainWindow().showPanel(mainView.getMainPanel());
+        UserRoleView userRoleView = RolesAssembly.assemble();
+        userRoleView.didLoad();
+        MainWindow.getMainWindow().showPanel(userRoleView.getPanel());
     }
 
     public void showAddingScene(ResultSet resultSet, TableType tableType) {

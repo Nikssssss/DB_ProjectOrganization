@@ -247,6 +247,11 @@ public class QueriesExecutor {
             case EQUIPMENTTYPE: return "equipment_type_id, equipment_type_name";
             case PROJECTS_EMPLOYEES: return "employee_id, project_id";
             case EQUIPMENT_PROJECTS: return "equipment_id, project_id";
+            case TECHNICS: return "employee_id, equipment_type_id";
+            case ENGINEERS: return "employee_id, projecting_program";
+            case CONSTRUCTORS: return "employee_id, certificates_number";
+            case ACCOUNTANTS: return "employee_id, accounting_program";
+            case MANAGERS: return "employee_id, interviews_number";
             default: return "";
         }
     }
@@ -280,11 +285,14 @@ public class QueriesExecutor {
         Statement statement = connection.createStatement();
         String query = "select department_name from departments where department_id = " + departmentId;
         ResultSet resultSet = statement.executeQuery(query);
-        resultSet.next();
-        String result = resultSet.getString(1);
-        resultSet.close();
-        statement.close();
-        return result;
+        if (resultSet.next()) {
+            String result = resultSet.getString(1);
+            resultSet.close();
+            statement.close();
+            return result;
+        } else {
+            return "";
+        }
     }
 
     public static String getEquipmentNameBy(String equipmentId) throws SQLException {

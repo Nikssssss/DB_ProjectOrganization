@@ -32,9 +32,7 @@ public class AddingPresenter {
             if (interactor.getCurrentTableType() == TableType.PROJECTS) {
                 Boolean isOwnOrganization;
                 while ((isOwnOrganization = addingView.chooseOrganizationForProject()) == null) {}
-                Boolean isNewProject;
-                while ((isNewProject = addingView.chooseProject()) == null) {}
-                addingView.configureProjectsView(columnsDropDownListData, isOwnOrganization, isNewProject);
+                addingView.configureProjectsView(columnsDropDownListData, isOwnOrganization, true);
             } else {
                 addingView.configureView(interactor.getCurrentTableType(), columnsDropDownListData);
             }

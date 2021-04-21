@@ -1,15 +1,13 @@
 package modules.login;
 
 import common.MainWindow;
-import modules.main.MainAssembly;
-import modules.main.MainView;
+import modules.roles.RolesAssembly;
+import modules.roles.views.UserRoleView;
 
 public class LoginRouter {
-
-    public void showMainScene() {
-        MainView mainView = MainAssembly.assemble();
-        mainView.didLoad();
-        MainWindow.getMainWindow().showPanel(mainView.getMainPanel());
+    public void showUserRoleScene() {
+        UserRoleView userRoleView = RolesAssembly.assemble();
+        userRoleView.didLoad();
+        MainWindow.getMainWindow().showPanel(userRoleView.getPanel());
     }
-
 }

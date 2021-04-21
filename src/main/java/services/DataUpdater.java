@@ -61,7 +61,7 @@ public class DataUpdater {
         ProjectData projectData = DataTransformer.getDatabaseProjectExistingRowFrom(rowData);
         resultSet.absolute(row);
         resultSet.updateString(2, projectData.getProjectName());
-        resultSet.updateInt(3, projectData.getProjectManager());
+        resultSet.updateObject(3, projectData.getProjectManager());
         resultSet.updateInt(4, projectData.getProjectCost());
         resultSet.updateDate(5, projectData.getStartDate());
         resultSet.updateDate(6, projectData.getFinishDate());
@@ -73,7 +73,7 @@ public class DataUpdater {
         ContractData contractData = DataTransformer.getDatabaseContractExistingRowFrom(rowData);
         resultSet.absolute(row);
         resultSet.updateString(2, contractData.getContractName());
-        resultSet.updateInt(3, contractData.getContractManager());
+        resultSet.updateObject(3, contractData.getContractManager());
         resultSet.updateDate(4, contractData.getStartDate());
         resultSet.updateDate(5, contractData.getFinishDate());
         resultSet.updateRow();
@@ -102,6 +102,21 @@ public class DataUpdater {
     public static void updateProjectsEmployeesRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
         ProjectsEmployeesData projectsEmployeesData = DataTransformer.getDatabaseProjectEmployeesExistingRowFrom(rowData);
         resultSet.absolute(row);
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateTechnicsRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        rowData.set(1, DataTransformer.getDatabaseEquipmentTypeIdBy(rowData.get(1)));
+        resultSet.absolute(row);
+        resultSet.updateInt(2, Integer.parseInt(rowData.get(1)));
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateEmployeeCategoryRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        resultSet.absolute(row);
+        resultSet.updateObject(2, rowData.get(1));
         resultSet.updateRow();
         connection.commit();
     }

@@ -6,13 +6,15 @@ import modules.main.MainView;
 import modules.queries.enums.QueryType;
 import modules.query.QueryAssembly;
 import modules.query.QueryView;
+import modules.roles.RolesAssembly;
+import modules.roles.views.UserRoleView;
 
 public class QueriesRouter {
 
     public void showMenuScene() {
-        MainView mainView = MainAssembly.assemble();
-        mainView.didLoad();
-        MainWindow.getMainWindow().showPanel(mainView.getMainPanel());
+        UserRoleView userRoleView = RolesAssembly.assemble();
+        userRoleView.didLoad();
+        MainWindow.getMainWindow().showPanel(userRoleView.getPanel());
     }
 
     public void showQueryScene(QueryType queryType) {

@@ -2,7 +2,7 @@ CREATE TABLE Contracts
 (
 	contract_id          NUMBER(6) NOT NULL ,
 	contract_name        VARCHAR2(100) NOT NULL ,
-	contract_manager     NUMBER(4) NOT NULL ,
+	contract_manager     NUMBER(4) NULL ,
 	start_date           DATE NOT NULL ,
 	finish_date          DATE NULL
 );
@@ -26,7 +26,7 @@ CREATE TABLE Projects
 (
 	project_id           NUMBER(5) NOT NULL ,
 	project_name        VARCHAR2(100) NOT NULL ,
-	project_manager      NUMBER(4) NOT NULL ,
+	project_manager      NUMBER(4) NULL ,
 	project_cost         NUMBER(9) NOT NULL ,
 	start_date           DATE NOT NULL ,
 	finish_date          DATE NULL
@@ -232,7 +232,7 @@ ALTER TABLE Departments
 	ADD (CONSTRAINT R_26 FOREIGN KEY (manager_id) REFERENCES Employees (employee_id) ON DELETE SET NULL);
 
 ALTER TABLE Equipment
-	ADD (CONSTRAINT R_27 FOREIGN KEY (department_id) REFERENCES Departments (department_id) ON DELETE SET NULL);
+	ADD (CONSTRAINT R_27 FOREIGN KEY (department_id) REFERENCES Departments (department_id) ON DELETE CASCADE);
 
 ALTER TABLE Equipment
 	ADD (CONSTRAINT R_14 FOREIGN KEY (equipment_type_id) REFERENCES EquipmentType (equipment_type_id) ON DELETE CASCADE);

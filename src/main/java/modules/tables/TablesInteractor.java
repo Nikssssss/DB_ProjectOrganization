@@ -79,6 +79,26 @@ public class TablesInteractor {
                 resultData = DataTransformer.getReadableColumnsAndRowsForEquipmentProjects(resultData);
                 break;
             }
+            case TECHNICS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForTechnics(resultData);
+                break;
+            }
+            case ENGINEERS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForEngineers(resultData);
+                break;
+            }
+            case MANAGERS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForManagers(resultData);
+                break;
+            }
+            case ACCOUNTANTS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForAccountants(resultData);
+                break;
+            }
+            case CONSTRUCTORS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForConstructors(resultData);
+                break;
+            }
         }
 
         return resultData;
@@ -96,7 +116,8 @@ public class TablesInteractor {
             case CONTRACTS:
             case PROJECTS: {
                 ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
-                ArrayList<String> managers = DataTransformer.getReadableManagerIDs();
+                ArrayList<String> managers = DataTransformer.getReadableProjectAndContractManagerIDs();
+                managers.add("-");
                 dropDownListData.add(managers);
                 return dropDownListData;
             }
@@ -114,6 +135,12 @@ public class TablesInteractor {
                 ArrayList<String> equipmentTypes = QueriesExecutor.getAllEquipmentTypes();
                 dropDownListData.add(equipmentTypes);
                 dropDownListData.add(departments);
+                return dropDownListData;
+            }
+            case TECHNICS: {
+                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
+                ArrayList<String> equipmentTypes = QueriesExecutor.getAllEquipmentTypes();
+                dropDownListData.add(equipmentTypes);
                 return dropDownListData;
             }
             default: {
@@ -158,6 +185,17 @@ public class TablesInteractor {
             }
             case PROJECTS_EMPLOYEES: {
                 DataUpdater.updateProjectsEmployeesRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case TECHNICS: {
+                DataUpdater.updateTechnicsRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case CONSTRUCTORS:
+            case ACCOUNTANTS:
+            case MANAGERS:
+            case ENGINEERS: {
+                DataUpdater.updateEmployeeCategoryRow(row, rowData, currentTableResultSet);
                 break;
             }
         }

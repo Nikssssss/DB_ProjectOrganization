@@ -152,9 +152,9 @@ public class AddingView {
 
     public void configureProjectsView(ArrayList<ArrayList<String>> comboBoxData, boolean isOwnOrganization, boolean isNewProject) {
         if (isOwnOrganization) {
-            this.setupProjectsContractView(comboBoxData, isNewProject);
+            this.setupProjectsContractView(comboBoxData);
         } else {
-            this.setupProjectsSubcontractView(comboBoxData, isNewProject);
+            this.setupProjectsSubcontractView(comboBoxData);
         }
     }
 
@@ -525,18 +525,14 @@ public class AddingView {
         this.placeSubComponents();
     }
 
-    private void setupProjectsContractView(ArrayList<ArrayList<String>> comboBoxData, boolean isNewProject) {
+    private void setupProjectsContractView(ArrayList<ArrayList<String>> comboBoxData) {
         addingPanel = new JPanel();
         addingPanel.setLayout(new GridBagLayout());
         addingPanel.setBackground(Color.LIGHT_GRAY);
 
         String[] fieldNames;
-        if (isNewProject) {
-            fieldNames = new String[]{"Название проекта", "Договор", "Руководитель проекта", "Исполнители",
-                    "Оборудование", "Стоимость проекта", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
-        } else {
-            fieldNames = new String[]{"Проект", "Договор"};
-        }
+        fieldNames = new String[]{"Название проекта", "Договор", "Руководитель проекта", "Исполнители",
+                "Оборудование", "Стоимость проекта", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
         fieldComponents = new ArrayList<>();
         fieldLabels = new ArrayList<>();
         for (String fieldName: fieldNames) {
@@ -589,18 +585,14 @@ public class AddingView {
         this.placeSubComponents();
     }
 
-    private void setupProjectsSubcontractView(ArrayList<ArrayList<String>> comboBoxData, boolean isNewProject) {
+    private void setupProjectsSubcontractView(ArrayList<ArrayList<String>> comboBoxData) {
         addingPanel = new JPanel();
         addingPanel.setLayout(new GridBagLayout());
         addingPanel.setBackground(Color.LIGHT_GRAY);
 
         String[] fieldNames;
-        if (isNewProject) {
-            fieldNames = new String[]{"Название проекта", "Субдоговор", "Руководитель проекта",
-                    "Стоимость проекта", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
-        } else {
-            fieldNames = new String[]{"Проект", "Субдоговор"};
-        }
+        fieldNames = new String[]{"Название проекта", "Субдоговор", "Руководитель проекта",
+                "Стоимость проекта", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
         fieldComponents = new ArrayList<>();
         fieldLabels = new ArrayList<>();
         for (String fieldName: fieldNames) {
