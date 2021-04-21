@@ -1,6 +1,7 @@
 CREATE TABLE Contracts
 (
 	contract_id          NUMBER(6) NOT NULL ,
+	contract_name        VARCHAR2(100) NOT NULL ,
 	contract_manager     NUMBER(4) NOT NULL ,
 	start_date           DATE NOT NULL ,
 	finish_date          DATE NULL
@@ -12,6 +13,7 @@ ALTER TABLE Contracts
 CREATE TABLE Subcontracts
 (
 	subcontract_id       NUMBER(6) NOT NULL ,
+	subcontract_name    VARCHAR2(100) NOT NULL ,
 	subcontractor_name   VARCHAR2(50) NOT NULL ,
 	start_date           DATE NOT NULL ,
 	finish_date          DATE NULL
@@ -23,6 +25,7 @@ ALTER TABLE Subcontracts
 CREATE TABLE Projects
 (
 	project_id           NUMBER(5) NOT NULL ,
+	project_name        VARCHAR2(100) NOT NULL ,
 	project_manager      NUMBER(4) NOT NULL ,
 	project_cost         NUMBER(9) NOT NULL ,
 	start_date           DATE NOT NULL ,

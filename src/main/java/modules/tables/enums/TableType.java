@@ -8,7 +8,9 @@ public enum TableType {
     PROJECTS("Проекты"),
     CONTRACTS("Договоры"),
     SUBCONTRACTS("Субдоговоры"),
-    EQUIPMENTTYPE("Типы оборудования");
+    EQUIPMENTTYPE("Типы оборудования"),
+    PROJECTS_EMPLOYEES("Исполнители проектов"),
+    EQUIPMENT_PROJECTS("Оборудование на проектах");
 
     private final String viewLabel;
 

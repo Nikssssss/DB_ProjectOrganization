@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class InsertingProjectData {
     private final Integer projectId;
+    private final String projectName;
     private final Integer contractId;
     private final Integer managerId;
     private final ArrayList<Integer> employees;
@@ -13,9 +14,10 @@ public class InsertingProjectData {
     private final Date startDate;
     private final Date finishDate;
 
-    public InsertingProjectData(Integer projectId, Integer contractId, Integer managerId, ArrayList<Integer> employees,
+    public InsertingProjectData(Integer projectId, String projectName, Integer contractId, Integer managerId, ArrayList<Integer> employees,
                                 ArrayList<Integer> equipment, Integer projectCost, Date startDate, Date finishDate) {
         this.projectId = projectId;
+        this.projectName = projectName;
         this.contractId = contractId;
         this.managerId = managerId;
         this.employees = employees;
@@ -27,6 +29,10 @@ public class InsertingProjectData {
 
     public Integer getProjectId() {
         return projectId;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 
     public Integer getContractId() {

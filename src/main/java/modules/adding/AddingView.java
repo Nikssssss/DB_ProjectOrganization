@@ -21,8 +21,12 @@ public class AddingView {
         this.presenter = presenter;
     }
 
-    public void setErrorMessage(String errorMessage){
-        JOptionPane.showMessageDialog(addingPanel, errorMessage, "Error!", JOptionPane.ERROR_MESSAGE);
+    public void setErrorMessage(String errorMessage) {
+        JOptionPane.showMessageDialog(addingPanel, errorMessage, "Ошибка!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void setInfoMessage(String infoMessage) {
+        JOptionPane.showMessageDialog(addingPanel, infoMessage, "Информация", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public JPanel getAddingPanel(){
@@ -82,6 +86,8 @@ public class AddingView {
         for (Component component: fieldComponents) {
             if (component instanceof JTextField) {
                 ((JTextField) component).setText("");
+            } else if (component instanceof JScrollPane) {
+                ((JList)(((JScrollPane) component).getViewport().getComponent(0))).clearSelection();
             }
         }
     }
@@ -191,6 +197,14 @@ public class AddingView {
             }
             case SUBCONTRACTS: {
                 this.setupSubcontractsAddingView();
+                break;
+            }
+            case PROJECTS_EMPLOYEES: {
+                this.setupProjectsEmployeesAddingView(comboBoxData);
+                break;
+            }
+            case EQUIPMENT_PROJECTS: {
+                this.setupEquipmentProjectsAddingView(comboBoxData);
                 break;
             }
         }
@@ -407,7 +421,7 @@ public class AddingView {
         addingPanel.setLayout(new GridBagLayout());
         addingPanel.setBackground(Color.LIGHT_GRAY);
 
-        String[] fieldNames = new String[]{"Руководитель договора", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
+        String[] fieldNames = new String[]{"Название договора", "Руководитель договора", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
         fieldComponents = new ArrayList<>();
         fieldLabels = new ArrayList<>();
         for (String fieldName: fieldNames) {
@@ -435,7 +449,7 @@ public class AddingView {
         addingPanel.setLayout(new GridBagLayout());
         addingPanel.setBackground(Color.LIGHT_GRAY);
 
-        String[] fieldNames = new String[]{"Название суборганизации", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
+        String[] fieldNames = new String[]{"Название субдоговора", "Название суборганизации", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
         fieldComponents = new ArrayList<>();
         fieldLabels = new ArrayList<>();
         for (String fieldName: fieldNames) {
@@ -449,6 +463,68 @@ public class AddingView {
         this.placeSubComponents();
     }
 
+    private void setupProjectsEmployeesAddingView(ArrayList<ArrayList<String>> comboBoxData) {
+        addingPanel = new JPanel();
+        addingPanel.setLayout(new GridBagLayout());
+        addingPanel.setBackground(Color.LIGHT_GRAY);
+
+        String[] fieldNames = new String[]{"Новый исполнитель", "Проект"};
+        fieldComponents = new ArrayList<>();
+        fieldLabels = new ArrayList<>();
+        for (String fieldName: fieldNames) {
+            fieldLabels.add(new JLabel(fieldName));
+            if (fieldName.equals("Новый исполнитель")) {
+                JComboBox<String> managersComboBox = new JComboBox<>();
+                ArrayList<String> managers = comboBoxData.get(0);
+                for (String profession: managers) {
+                    managersComboBox.addItem(profession);
+                }
+                fieldComponents.add(managersComboBox);
+            } else if (fieldName.equals("Проект")) {
+                JComboBox<String> projectsComboBox = new JComboBox<>();
+                ArrayList<String> projects = comboBoxData.get(1);
+                for (String project: projects) {
+                    projectsComboBox.addItem(project);
+                }
+                fieldComponents.add(projectsComboBox);
+            }
+        }
+
+        this.setupButtons();
+        this.placeSubComponents();
+    }
+
+    private void setupEquipmentProjectsAddingView(ArrayList<ArrayList<String>> comboBoxData) {
+        addingPanel = new JPanel();
+        addingPanel.setLayout(new GridBagLayout());
+        addingPanel.setBackground(Color.LIGHT_GRAY);
+
+        String[] fieldNames = new String[]{"Новое оборудование", "Проект"};
+        fieldComponents = new ArrayList<>();
+        fieldLabels = new ArrayList<>();
+        for (String fieldName: fieldNames) {
+            fieldLabels.add(new JLabel(fieldName));
+            if (fieldName.equals("Новое оборудование")) {
+                JComboBox<String> managersComboBox = new JComboBox<>();
+                ArrayList<String> managers = comboBoxData.get(0);
+                for (String profession: managers) {
+                    managersComboBox.addItem(profession);
+                }
+                fieldComponents.add(managersComboBox);
+            } else if (fieldName.equals("Проект")) {
+                JComboBox<String> projectsComboBox = new JComboBox<>();
+                ArrayList<String> projects = comboBoxData.get(1);
+                for (String project: projects) {
+                    projectsComboBox.addItem(project);
+                }
+                fieldComponents.add(projectsComboBox);
+            }
+        }
+
+        this.setupButtons();
+        this.placeSubComponents();
+    }
+
     private void setupProjectsContractView(ArrayList<ArrayList<String>> comboBoxData, boolean isNewProject) {
         addingPanel = new JPanel();
         addingPanel.setLayout(new GridBagLayout());
@@ -456,7 +532,7 @@ public class AddingView {
 
         String[] fieldNames;
         if (isNewProject) {
-            fieldNames = new String[]{"Договор", "Руководитель проекта", "Исполнители",
+            fieldNames = new String[]{"Название проекта", "Договор", "Руководитель проекта", "Исполнители",
                     "Оборудование", "Стоимость проекта", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
         } else {
             fieldNames = new String[]{"Проект", "Договор"};
@@ -520,7 +596,7 @@ public class AddingView {
 
         String[] fieldNames;
         if (isNewProject) {
-            fieldNames = new String[]{"Субдоговор", "Руководитель проекта",
+            fieldNames = new String[]{"Название проекта", "Субдоговор", "Руководитель проекта",
                     "Стоимость проекта", "Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
         } else {
             fieldNames = new String[]{"Проект", "Субдоговор"};

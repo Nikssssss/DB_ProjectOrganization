@@ -102,6 +102,14 @@ public class TablesView {
                 this.setTableModelForEquipmentType(columnNames);
                 break;
             }
+            case PROJECTS_EMPLOYEES: {
+                this.setTableModelForProjectsEmployees(columnNames);
+                break;
+            }
+            case EQUIPMENT_PROJECTS: {
+                this.setTableModelForEquipmentProjects(columnNames);
+                break;
+            }
         }
     }
 
@@ -147,6 +155,8 @@ public class TablesView {
         this.entitiesComboBox.addItem("Проекты");
         this.entitiesComboBox.addItem("Договоры");
         this.entitiesComboBox.addItem("Субдоговоры");
+        this.entitiesComboBox.addItem("Исполнители проектов");
+        this.entitiesComboBox.addItem("Оборудование на проектах");
         this.entitiesComboBox.addActionListener(e -> presenter.comboBoxItemChanged());
     }
 
@@ -155,7 +165,7 @@ public class TablesView {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.insets.right = 150;
+        constraints.insets.right = 130;
         this.tablePanel.add(this.backButton, constraints);
 
         constraints.gridx = 1;
@@ -165,7 +175,7 @@ public class TablesView {
 
         constraints.gridx = 2;
         constraints.gridy = 0;
-        constraints.insets.left = 150;
+        constraints.insets.left = 130;
         this.tablePanel.add(this.addRowButton, constraints);
     }
 
@@ -375,6 +385,46 @@ public class TablesView {
 
     private void setTableModelForProjects(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
         this.reinitializeTable();
+        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 3, 5});
+        for (String columnName: columnNames) {
+            this.entityTableModel.addColumn(columnName);
+        }
+        this.entityTableModel.addColumn("");
+
+        this.entityTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (entityTable.getSelectedColumn() == 6) {
+                    if (entityTable.getSelectedRow() != -1) {
+                        presenter.deleteRowButtonPressed(entityTable.getSelectedRow());
+                    }
+                }
+            }
+        });
+
+        TableColumn managerColumn = this.entityTable.getColumnModel().getColumn(2);
+        JComboBox<String> managerComboBox = new JComboBox<>();
+        ArrayList<String> managers = dropDownListsData.get(0);
+        for (String manager: managers) {
+            managerComboBox.addItem(manager);
+        }
+        managerColumn.setCellEditor(new DefaultCellEditor(managerComboBox));
+
+        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(6);
+        deleteColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                component.setForeground(Color.RED);
+                return component;
+            }
+        });
+
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
+    }
+
+    private void setTableModelForContracts(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
+        this.reinitializeTable();
         this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4});
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
@@ -392,7 +442,7 @@ public class TablesView {
             }
         });
 
-        TableColumn managerColumn = this.entityTable.getColumnModel().getColumn(1);
+        TableColumn managerColumn = this.entityTable.getColumnModel().getColumn(2);
         JComboBox<String> managerComboBox = new JComboBox<>();
         ArrayList<String> managers = dropDownListsData.get(0);
         for (String manager: managers) {
@@ -413,49 +463,9 @@ public class TablesView {
         this.entityTableModel.addTableModelListener(this.tableModelListener);
     }
 
-    private void setTableModelForContracts(ArrayList<String> columnNames, ArrayList<ArrayList<String>> dropDownListsData) {
-        this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 3});
-        for (String columnName: columnNames) {
-            this.entityTableModel.addColumn(columnName);
-        }
-        this.entityTableModel.addColumn("");
-
-        this.entityTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (entityTable.getSelectedColumn() == 4) {
-                    if (entityTable.getSelectedRow() != -1) {
-                        presenter.deleteRowButtonPressed(entityTable.getSelectedRow());
-                    }
-                }
-            }
-        });
-
-        TableColumn managerColumn = this.entityTable.getColumnModel().getColumn(1);
-        JComboBox<String> managerComboBox = new JComboBox<>();
-        ArrayList<String> managers = dropDownListsData.get(0);
-        for (String manager: managers) {
-            managerComboBox.addItem(manager);
-        }
-        managerColumn.setCellEditor(new DefaultCellEditor(managerComboBox));
-
-        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(4);
-        deleteColumn.setCellRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                component.setForeground(Color.RED);
-                return component;
-            }
-        });
-
-        this.entityTableModel.addTableModelListener(this.tableModelListener);
-    }
-
     private void setTableModelForSubcontracts(ArrayList<String> columnNames) {
         this.reinitializeTable();
-        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 3});
+        this.entityTableModel.addAllEditableColumns(new Integer[]{1, 2, 4});
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }
@@ -464,7 +474,7 @@ public class TablesView {
         this.entityTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (entityTable.getSelectedColumn() == 4) {
+                if (entityTable.getSelectedColumn() == 5) {
                     if (entityTable.getSelectedRow() != -1) {
                         presenter.deleteRowButtonPressed(entityTable.getSelectedRow());
                     }
@@ -472,7 +482,7 @@ public class TablesView {
             }
         });
 
-        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(4);
+        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(5);
         deleteColumn.setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -488,6 +498,68 @@ public class TablesView {
     private void setTableModelForEquipmentType(ArrayList<String> columnNames) {
         this.reinitializeTable();
         this.entityTableModel.addAllEditableColumns(new Integer[]{1});
+        for (String columnName: columnNames) {
+            this.entityTableModel.addColumn(columnName);
+        }
+        this.entityTableModel.addColumn("");
+
+        this.entityTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (entityTable.getSelectedColumn() == 2) {
+                    if (entityTable.getSelectedRow() != -1) {
+                        presenter.deleteRowButtonPressed(entityTable.getSelectedRow());
+                    }
+                }
+            }
+        });
+
+        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(2);
+        deleteColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                component.setForeground(Color.RED);
+                return component;
+            }
+        });
+
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
+    }
+
+    private void setTableModelForProjectsEmployees(ArrayList<String> columnNames) {
+        this.reinitializeTable();
+        for (String columnName: columnNames) {
+            this.entityTableModel.addColumn(columnName);
+        }
+        this.entityTableModel.addColumn("");
+
+        this.entityTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (entityTable.getSelectedColumn() == 2) {
+                    if (entityTable.getSelectedRow() != -1) {
+                        presenter.deleteRowButtonPressed(entityTable.getSelectedRow());
+                    }
+                }
+            }
+        });
+
+        TableColumn deleteColumn = this.entityTable.getColumnModel().getColumn(2);
+        deleteColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                component.setForeground(Color.RED);
+                return component;
+            }
+        });
+
+        this.entityTableModel.addTableModelListener(this.tableModelListener);
+    }
+
+    private void setTableModelForEquipmentProjects(ArrayList<String> columnNames) {
+        this.reinitializeTable();
         for (String columnName: columnNames) {
             this.entityTableModel.addColumn(columnName);
         }

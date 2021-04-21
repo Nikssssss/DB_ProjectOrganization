@@ -113,9 +113,9 @@ public class QueriesExecutor {
         return professions;
     }
 
-    public static ArrayList<String> getAllProjectIDs() throws SQLException {
+    public static ArrayList<String> getAllProjects() throws SQLException {
         Statement statement = connection.createStatement();
-        String query = "select project_id from projects";
+        String query = "select project_name from projects";
         ResultSet resultSet = statement.executeQuery(query);
         ArrayList<String> projectIDs = new ArrayList<>();
         while (resultSet.next()) {
@@ -126,9 +126,9 @@ public class QueriesExecutor {
         return projectIDs;
     }
 
-    public static ArrayList<String> getAllContractIDs() throws SQLException {
+    public static ArrayList<String> getAllContracts() throws SQLException {
         Statement statement = connection.createStatement();
-        String query = "select contract_id from contracts";
+        String query = "select contract_name from contracts";
         ResultSet resultSet = statement.executeQuery(query);
         ArrayList<String> contractIDs = new ArrayList<>();
         while (resultSet.next()) {
@@ -139,9 +139,9 @@ public class QueriesExecutor {
         return contractIDs;
     }
 
-    public static ArrayList<String> getAllSubcontractIDs() throws SQLException {
+    public static ArrayList<String> getAllSubcontracts() throws SQLException {
         Statement statement = connection.createStatement();
-        String query = "select subcontract_id from subcontracts";
+        String query = "select subcontract_name from subcontracts";
         ResultSet resultSet = statement.executeQuery(query);
         ArrayList<String> subcontractIDs = new ArrayList<>();
         while (resultSet.next()) {
@@ -241,10 +241,12 @@ public class QueriesExecutor {
             case DEPARTMENTS: return "department_id, department_name, manager_id";
             case PROFESSIONS: return "profession_id, profession_name, management_ability, department_id";
             case EQUIPMENT: return "equipment_id, equipment_name, equipment_type_id, department_id";
-            case PROJECTS: return "project_id, project_manager, project_cost, start_date, finish_date";
-            case CONTRACTS: return "contract_id, contract_manager, start_date, finish_date";
-            case SUBCONTRACTS: return "subcontract_id, subcontractor_name, start_date, finish_date";
+            case PROJECTS: return "project_id, project_name, project_manager, project_cost, start_date, finish_date";
+            case CONTRACTS: return "contract_id, contract_name, contract_manager, start_date, finish_date";
+            case SUBCONTRACTS: return "subcontract_id, subcontract_name, subcontractor_name, start_date, finish_date";
             case EQUIPMENTTYPE: return "equipment_type_id, equipment_type_name";
+            case PROJECTS_EMPLOYEES: return "employee_id, project_id";
+            case EQUIPMENT_PROJECTS: return "equipment_id, project_id";
             default: return "";
         }
     }
@@ -277,6 +279,28 @@ public class QueriesExecutor {
     public static String getDepartmentNameBy(String departmentId) throws SQLException {
         Statement statement = connection.createStatement();
         String query = "select department_name from departments where department_id = " + departmentId;
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
+    }
+
+    public static String getEquipmentNameBy(String equipmentId) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select equipment_name from equipment where equipment_id = " + equipmentId;
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
+    }
+
+    public static String getEquipmentIdBy(String equipmentName) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select equipment_id from equipment where equipment_name = '" + equipmentName + "'";
         ResultSet resultSet = statement.executeQuery(query);
         resultSet.next();
         String result = resultSet.getString(1);
@@ -329,9 +353,53 @@ public class QueriesExecutor {
         return result;
     }
 
+    public static String getProjectNameBy(String projectId) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select project_name from projects where project_id = " + projectId;
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
+    }
+
     public static ResultSet executeBusinessQuery(String query) throws SQLException {
         Statement statement = connection.createStatement();
         return statement.executeQuery(query);
+    }
+
+    public static String getProjectIdBy(String projectName) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select project_id from projects where project_name = '" + projectName + "'";
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
+    }
+
+    public static String getContractIdBy(String contractName) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select contract_id from contracts where contract_name = '" + contractName + "'";
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
+    }
+
+    public static String getSubcontractIdBy(String subcontractName) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select subcontract_id from subcontracts where subcontract_name = '" + subcontractName + "'";
+        ResultSet resultSet = statement.executeQuery(query);
+        resultSet.next();
+        String result = resultSet.getString(1);
+        resultSet.close();
+        statement.close();
+        return result;
     }
 
 }

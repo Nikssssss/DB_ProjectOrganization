@@ -71,6 +71,14 @@ public class TablesInteractor {
                 resultData = DataTransformer.getReadableColumnsAndRowsForEquipmentType(resultData);
                 break;
             }
+            case PROJECTS_EMPLOYEES: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForProjectsEmployees(resultData);
+                break;
+            }
+            case EQUIPMENT_PROJECTS: {
+                resultData = DataTransformer.getReadableColumnsAndRowsForEquipmentProjects(resultData);
+                break;
+            }
         }
 
         return resultData;
@@ -146,6 +154,10 @@ public class TablesInteractor {
             }
             case EQUIPMENTTYPE: {
                 DataUpdater.updateEquipmentTypeRow(row, rowData, currentTableResultSet);
+                break;
+            }
+            case PROJECTS_EMPLOYEES: {
+                DataUpdater.updateProjectsEmployeesRow(row, rowData, currentTableResultSet);
                 break;
             }
         }

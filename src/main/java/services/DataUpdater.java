@@ -60,10 +60,11 @@ public class DataUpdater {
     public static void updateProjectsRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
         ProjectData projectData = DataTransformer.getDatabaseProjectExistingRowFrom(rowData);
         resultSet.absolute(row);
-        resultSet.updateInt(2, projectData.getProjectManager());
-        resultSet.updateInt(3, projectData.getProjectCost());
-        resultSet.updateDate(4, projectData.getStartDate());
-        resultSet.updateDate(5, projectData.getFinishDate());
+        resultSet.updateString(2, projectData.getProjectName());
+        resultSet.updateInt(3, projectData.getProjectManager());
+        resultSet.updateInt(4, projectData.getProjectCost());
+        resultSet.updateDate(5, projectData.getStartDate());
+        resultSet.updateDate(6, projectData.getFinishDate());
         resultSet.updateRow();
         connection.commit();
     }
@@ -71,9 +72,10 @@ public class DataUpdater {
     public static void updateContractsRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
         ContractData contractData = DataTransformer.getDatabaseContractExistingRowFrom(rowData);
         resultSet.absolute(row);
-        resultSet.updateInt(2, contractData.getContractManager());
-        resultSet.updateDate(3, contractData.getStartDate());
-        resultSet.updateDate(4, contractData.getFinishDate());
+        resultSet.updateString(2, contractData.getContractName());
+        resultSet.updateInt(3, contractData.getContractManager());
+        resultSet.updateDate(4, contractData.getStartDate());
+        resultSet.updateDate(5, contractData.getFinishDate());
         resultSet.updateRow();
         connection.commit();
     }
@@ -81,9 +83,10 @@ public class DataUpdater {
     public static void updateSubcontractsRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
         SubcontractData subcontractData = DataTransformer.getDatabaseSubcontractExistingRowFrom(rowData);
         resultSet.absolute(row);
-        resultSet.updateString(2, subcontractData.getSubcontractorName());
-        resultSet.updateDate(3, subcontractData.getStartDate());
-        resultSet.updateDate(4, subcontractData.getFinishDate());
+        resultSet.updateString(2, subcontractData.getSubcontractName());
+        resultSet.updateString(3, subcontractData.getSubcontractorName());
+        resultSet.updateDate(4, subcontractData.getStartDate());
+        resultSet.updateDate(5, subcontractData.getFinishDate());
         resultSet.updateRow();
         connection.commit();
     }
@@ -92,6 +95,13 @@ public class DataUpdater {
         EquipmentTypeData equipmentTypeData = DataTransformer.getDatabaseEquipmentTypeExistingRowFrom(rowData);
         resultSet.absolute(row);
         resultSet.updateString(2, equipmentTypeData.getEquipmentTypeName());
+        resultSet.updateRow();
+        connection.commit();
+    }
+
+    public static void updateProjectsEmployeesRow(int row, ArrayList<String> rowData, ResultSet resultSet) throws SQLException {
+        ProjectsEmployeesData projectsEmployeesData = DataTransformer.getDatabaseProjectEmployeesExistingRowFrom(rowData);
+        resultSet.absolute(row);
         resultSet.updateRow();
         connection.commit();
     }
@@ -180,9 +190,10 @@ public class DataUpdater {
     public static void insertContractRow(ArrayList<String> insertingData, ResultSet resultSet) throws SQLException {
         resultSet.moveToInsertRow();
         ContractData contractData = DataTransformer.getDatabaseContractInsertingRowFrom(insertingData);
-        resultSet.updateInt(2, contractData.getContractManager());
-        resultSet.updateDate(3, contractData.getStartDate());
-        resultSet.updateDate(4, contractData.getFinishDate());
+        resultSet.updateString(2, contractData.getContractName());
+        resultSet.updateInt(3, contractData.getContractManager());
+        resultSet.updateDate(4, contractData.getStartDate());
+        resultSet.updateDate(5, contractData.getFinishDate());
         resultSet.insertRow();
         connection.commit();
     }
@@ -191,11 +202,31 @@ public class DataUpdater {
         resultSet.moveToInsertRow();
         SubcontractData subcontractData = new SubcontractData(null,
                 insertingData.get(0),
-                Date.valueOf(insertingData.get(1)),
-                Date.valueOf(insertingData.get(2)));
-        resultSet.updateString(2, subcontractData.getSubcontractorName());
-        resultSet.updateDate(3, subcontractData.getStartDate());
-        resultSet.updateDate(4, subcontractData.getFinishDate());
+                insertingData.get(1),
+                Date.valueOf(insertingData.get(2)),
+                Date.valueOf(insertingData.get(3)));
+        resultSet.updateString(2, subcontractData.getSubcontractName());
+        resultSet.updateString(3, subcontractData.getSubcontractorName());
+        resultSet.updateDate(4, subcontractData.getStartDate());
+        resultSet.updateDate(5, subcontractData.getFinishDate());
+        resultSet.insertRow();
+        connection.commit();
+    }
+
+    public static void insertProjectsEmployeesRow(ArrayList<String> insertingData, ResultSet resultSet) throws SQLException {
+        resultSet.moveToInsertRow();
+        ProjectsEmployeesData projectsEmployeesData = DataTransformer.getDatabaseProjectEmployeesInsertingRowFrom(insertingData);
+        resultSet.updateInt(1, projectsEmployeesData.getEmployeeId());
+        resultSet.updateInt(2, projectsEmployeesData.getProjectId());
+        resultSet.insertRow();
+        connection.commit();
+    }
+
+    public static void insertEquipmentProjectsRow(ArrayList<String> insertingData, ResultSet resultSet) throws SQLException {
+        resultSet.moveToInsertRow();
+        EquipmentProjectsData equipmentProjectsData = DataTransformer.getDatabaseEquipmentProjectsInsertingRowFrom(insertingData);
+        resultSet.updateInt(1, equipmentProjectsData.getEquipmentId());
+        resultSet.updateInt(2, equipmentProjectsData.getProjectId());
         resultSet.insertRow();
         connection.commit();
     }
@@ -203,10 +234,11 @@ public class DataUpdater {
     public static void insertProjectContractRow(ArrayList<Object> insertingData, ResultSet resultSet) throws SQLException {
         resultSet.moveToInsertRow();
         InsertingProjectData insertingProjectData = DataTransformer.getDatabaseInsertingProjectContractRowFrom(insertingData);
-        resultSet.updateInt(2, insertingProjectData.getManagerId());
-        resultSet.updateInt(3, insertingProjectData.getProjectCost());
-        resultSet.updateDate(4, insertingProjectData.getStartDate());
-        resultSet.updateDate(5, insertingProjectData.getFinishDate());
+        resultSet.updateString(2, insertingProjectData.getProjectName());
+        resultSet.updateInt(3, insertingProjectData.getManagerId());
+        resultSet.updateInt(4, insertingProjectData.getProjectCost());
+        resultSet.updateDate(5, insertingProjectData.getStartDate());
+        resultSet.updateDate(6, insertingProjectData.getFinishDate());
         resultSet.insertRow();
         connection.commit();
 
@@ -235,10 +267,11 @@ public class DataUpdater {
     public static void insertProjectSubcontractRow(ArrayList<Object> insertingData, ResultSet resultSet) throws SQLException {
         resultSet.moveToInsertRow();
         InsertingProjectData insertingProjectData = DataTransformer.getDatabaseInsertingProjectSubcontractRowFrom(insertingData);
-        resultSet.updateInt(2, insertingProjectData.getManagerId());
-        resultSet.updateInt(3, insertingProjectData.getProjectCost());
-        resultSet.updateDate(4, insertingProjectData.getStartDate());
-        resultSet.updateDate(5, insertingProjectData.getFinishDate());
+        resultSet.updateString(2, insertingProjectData.getProjectName());
+        resultSet.updateInt(3, insertingProjectData.getManagerId());
+        resultSet.updateInt(4, insertingProjectData.getProjectCost());
+        resultSet.updateDate(5, insertingProjectData.getStartDate());
+        resultSet.updateDate(6, insertingProjectData.getFinishDate());
         resultSet.insertRow();
 
         resultSet.moveToCurrentRow();

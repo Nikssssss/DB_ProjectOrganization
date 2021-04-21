@@ -63,25 +63,25 @@ insert into equipment(equipment_name, equipment_type_id, department_id)
 insert into equipment(equipment_name, equipment_type_id, department_id)
        values('Тепловизор3', 6, 1);
 
-insert into projects(project_manager, project_cost, start_date, finish_date)
-       values(2, 100000, to_date('2021-09-09', 'yyyy-mm-dd'), to_date('2022-09-09', 'yyyy-mm-dd'));
-insert into projects(project_manager, project_cost, start_date, finish_date)
-       values(3, 200000, to_date('2018-09-12', 'yyyy-mm-dd'), to_date('2021-08-12', 'yyyy-mm-dd'));
-insert into projects(project_manager, project_cost, start_date, finish_date)
-       values(4, 60000, to_date('2021-01-09', 'yyyy-mm-dd'), to_date('2021-06-09', 'yyyy-mm-dd'));
-insert into projects(project_manager, project_cost, start_date, finish_date)
-       values(5, 50000, to_date('2019-03-15', 'yyyy-mm-dd'), to_date('2022-03-15', 'yyyy-mm-dd'));
+insert into projects(project_name, project_manager, project_cost, start_date, finish_date)
+       values('проект1', 2, 100000, to_date('2021-09-09', 'yyyy-mm-dd'), to_date('2022-09-09', 'yyyy-mm-dd'));
+insert into projects(project_name, project_manager, project_cost, start_date, finish_date)
+       values('проект2', 3, 200000, to_date('2018-09-12', 'yyyy-mm-dd'), to_date('2021-08-12', 'yyyy-mm-dd'));
+insert into projects(project_name, project_manager, project_cost, start_date, finish_date)
+       values('проект3', 4, 60000, to_date('2021-01-09', 'yyyy-mm-dd'), to_date('2021-06-09', 'yyyy-mm-dd'));
+insert into projects(project_name, project_manager, project_cost, start_date, finish_date)
+       values('проект4', 5, 50000, to_date('2019-03-15', 'yyyy-mm-dd'), to_date('2022-03-15', 'yyyy-mm-dd'));
 
-insert into contracts(contract_manager, start_date, finish_date)
-       values(2, to_date('2021-09-09', 'yyyy-mm-dd'), to_date('2022-09-09', 'yyyy-mm-dd'));
-insert into contracts(contract_manager, start_date, finish_date)
-       values(3, to_date('2018-09-12', 'yyyy-mm-dd'), to_date('2021-08-12', 'yyyy-mm-dd'));
-insert into contracts(contract_manager, start_date, finish_date)
-       values(4, to_date('2021-01-09', 'yyyy-mm-dd'), to_date('2021-06-09', 'yyyy-mm-dd'));
-insert into contracts(contract_manager, start_date, finish_date)
-       values(5, to_date('2019-03-15', 'yyyy-mm-dd'), to_date('2022-03-15', 'yyyy-mm-dd'));
+insert into contracts(contract_name, contract_manager, start_date, finish_date)
+       values('договор1', 2, to_date('2021-09-09', 'yyyy-mm-dd'), to_date('2022-09-09', 'yyyy-mm-dd'));
+insert into contracts(contract_name, contract_manager, start_date, finish_date)
+       values('договор2', 3, to_date('2018-09-12', 'yyyy-mm-dd'), to_date('2021-08-12', 'yyyy-mm-dd'));
+insert into contracts(contract_name, contract_manager, start_date, finish_date)
+       values('договор3', 4, to_date('2021-01-09', 'yyyy-mm-dd'), to_date('2021-06-09', 'yyyy-mm-dd'));
+insert into contracts(contract_name, contract_manager, start_date, finish_date)
+       values('договор4', 5, to_date('2019-03-15', 'yyyy-mm-dd'), to_date('2022-03-15', 'yyyy-mm-dd'));
 
-insert into subcontracts(subcontractor_name, start_date, finish_date)
-       values('Company1', to_date('2020-08-09', 'yyyy-mm-dd'), to_date('2022-12-09', 'yyyy-mm-dd'));
-insert into subcontracts(subcontractor_name, start_date, finish_date)
-       values('Company2', to_date('2018-12-05', 'yyyy-mm-dd'), to_date('2020-12-05', 'yyyy-mm-dd'));
+insert into subcontracts(subcontract_name, subcontractor_name, start_date, finish_date)
+       values('субдоговор1', 'Company1', to_date('2020-08-09', 'yyyy-mm-dd'), to_date('2022-12-09', 'yyyy-mm-dd'));
+insert into subcontracts(subcontract_name, subcontractor_name, start_date, finish_date)
+       values('субдоговор2', 'Company2', to_date('2018-12-05', 'yyyy-mm-dd'), to_date('2020-12-05', 'yyyy-mm-dd'));

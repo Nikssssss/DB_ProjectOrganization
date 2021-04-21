@@ -71,13 +71,13 @@ public class AddingPresenter {
                 boolean isOwnOrganization = addingView.isOwnProjectOrganization();
                 boolean isNewProject;
                 if (isOwnOrganization) {
-                    if (insertingData.size() == 7) {
+                    if (insertingData.size() == 8) {
                         isNewProject = true;
                     } else {
                         isNewProject = false;
                     }
                 } else {
-                    if (insertingData.size() == 5) {
+                    if (insertingData.size() == 6) {
                         isNewProject = true;
                     } else {
                         isNewProject = false;
@@ -85,7 +85,7 @@ public class AddingPresenter {
                 }
                 try {
                     interactor.insertProjectRow(insertingData, isOwnOrganization, isNewProject);
-                    addingView.clearAllFields();
+                    router.showTablesScene();
                 } catch (SQLException | DateTimeException e) {
                     e.printStackTrace();
                     addingView.setErrorMessage(e.getMessage());
@@ -96,6 +96,7 @@ public class AddingPresenter {
                     String employeeCategory = addingView.getEmployeeCategory();
                     interactor.insertRow(insertingData, employeeCategory);
                     addingView.clearAllFields();
+                    addingView.setInfoMessage("Запись добавлена");
                 } catch (SQLException | IllegalArgumentException e) {
                     e.printStackTrace();
                     addingView.setErrorMessage("Пожалуйста, введите корректные значения \n" + e.getMessage());
@@ -105,6 +106,7 @@ public class AddingPresenter {
                     ArrayList<String> insertingData = addingView.getAllInsertingData();
                     interactor.insertRow(insertingData, null);
                     addingView.clearAllFields();
+                    addingView.setInfoMessage("Запись добавлена");
                 } catch (SQLException | DateTimeException | IllegalArgumentException e) {
                     e.printStackTrace();
                     addingView.setErrorMessage("Пожалуйста, введите корректные значения \n" + e.getMessage());

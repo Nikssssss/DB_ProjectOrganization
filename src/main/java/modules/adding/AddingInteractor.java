@@ -59,15 +59,15 @@ public class AddingInteractor {
             }
             case PROJECTS: {
                 ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
-                ArrayList<String> projectIDs = QueriesExecutor.getAllProjectIDs();
-                ArrayList<String> contractIDs = QueriesExecutor.getAllContractIDs();
-                ArrayList<String> subcontractIDs = QueriesExecutor.getAllSubcontractIDs();
+                ArrayList<String> projects = QueriesExecutor.getAllProjects();
+                ArrayList<String> contracts = QueriesExecutor.getAllContracts();
+                ArrayList<String> subcontracts = QueriesExecutor.getAllSubcontracts();
                 ArrayList<String> managers = DataTransformer.getReadableProjectAndContractManagerIDs();
                 ArrayList<String> employees = DataTransformer.getReadableEmployeeIDs();
                 ArrayList<String> equipment = DataTransformer.getReadableUnusedEquipmentIDs();
-                dropDownListData.add(projectIDs);
-                dropDownListData.add(contractIDs);
-                dropDownListData.add(subcontractIDs);
+                dropDownListData.add(projects);
+                dropDownListData.add(contracts);
+                dropDownListData.add(subcontracts);
                 dropDownListData.add(managers);
                 dropDownListData.add(employees);
                 dropDownListData.add(equipment);
@@ -77,6 +77,22 @@ public class AddingInteractor {
                 ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
                 ArrayList<String> managers = DataTransformer.getReadableProjectAndContractManagerIDs();
                 dropDownListData.add(managers);
+                return dropDownListData;
+            }
+            case PROJECTS_EMPLOYEES: {
+                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
+                ArrayList<String> employees = DataTransformer.getReadableEmployeeIDs();
+                ArrayList<String> projects = QueriesExecutor.getAllProjects();
+                dropDownListData.add(employees);
+                dropDownListData.add(projects);
+                return dropDownListData;
+            }
+            case EQUIPMENT_PROJECTS: {
+                ArrayList<ArrayList<String>> dropDownListData = new ArrayList<>();
+                ArrayList<String> equipment = DataTransformer.getReadableUnusedEquipmentIDs();
+                ArrayList<String> projects = QueriesExecutor.getAllProjects();
+                dropDownListData.add(equipment);
+                dropDownListData.add(projects);
                 return dropDownListData;
             }
             default: {
@@ -108,17 +124,25 @@ public class AddingInteractor {
                 break;
             }
             case CONTRACTS: {
-                if (!hasCorrectDateInterval(Date.valueOf(insertingData.get(1)), Date.valueOf(insertingData.get(2)))) {
+                if (!hasCorrectDateInterval(Date.valueOf(insertingData.get(2)), Date.valueOf(insertingData.get(3)))) {
                     throw new DateTimeException("Дата окончания <= дата начала");
                 }
                 DataUpdater.insertContractRow(insertingData, resultSet);
                 break;
             }
             case SUBCONTRACTS: {
-                if (!hasCorrectDateInterval(Date.valueOf(insertingData.get(1)), Date.valueOf(insertingData.get(2)))) {
+                if (!hasCorrectDateInterval(Date.valueOf(insertingData.get(2)), Date.valueOf(insertingData.get(3)))) {
                     throw new DateTimeException("Дата окончания <= дата начала");
                 }
                 DataUpdater.insertSubcontractRow(insertingData, resultSet);
+                break;
+            }
+            case PROJECTS_EMPLOYEES: {
+                DataUpdater.insertProjectsEmployeesRow(insertingData, resultSet);
+                break;
+            }
+            case EQUIPMENT_PROJECTS: {
+                DataUpdater.insertEquipmentProjectsRow(insertingData, resultSet);
                 break;
             }
         }
@@ -127,20 +151,26 @@ public class AddingInteractor {
     public void insertProjectRow(ArrayList<Object> insertingData, boolean isOwnOrganization, boolean isNewProject) throws SQLException, DateTimeException {
         if (isOwnOrganization) {
             if (isNewProject) {
-                if (!hasCorrectDateInterval(Date.valueOf((String) insertingData.get(5)), Date.valueOf((String) insertingData.get(6)))) {
+                if (!hasCorrectDateInterval(Date.valueOf((String) insertingData.get(6)), Date.valueOf((String) insertingData.get(7)))) {
                     throw new DateTimeException("Дата окончания <= дата начала");
                 }
+                insertingData.set(1, DataTransformer.getDatabaseContractIdBy((String) insertingData.get(1)));
                 DataUpdater.insertProjectContractRow(insertingData, resultSet);
             } else {
+                insertingData.set(0, DataTransformer.getDatabaseProjectIdBy((String) insertingData.get(0)));
+                insertingData.set(1, DataTransformer.getDatabaseContractIdBy((String) insertingData.get(1)));
                 DataUpdater.addExistingContractProject(insertingData);
             }
         } else {
             if (isNewProject) {
-                if (!hasCorrectDateInterval(Date.valueOf((String) insertingData.get(3)), Date.valueOf((String) insertingData.get(4)))) {
+                if (!hasCorrectDateInterval(Date.valueOf((String) insertingData.get(4)), Date.valueOf((String) insertingData.get(5)))) {
                     throw new DateTimeException("Дата окончания <= дата начала");
                 }
+                insertingData.set(1, DataTransformer.getDatabaseSubcontractIdBy((String) insertingData.get(1)));
                 DataUpdater.insertProjectSubcontractRow(insertingData, resultSet);
             } else {
+                insertingData.set(0, DataTransformer.getDatabaseProjectIdBy((String) insertingData.get(0)));
+                insertingData.set(1, DataTransformer.getDatabaseSubcontractIdBy((String) insertingData.get(1)));
                 DataUpdater.addExistingSubcontractProject(insertingData);
             }
         }
