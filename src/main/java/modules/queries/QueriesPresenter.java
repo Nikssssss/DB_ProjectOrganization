@@ -33,8 +33,7 @@ public class QueriesPresenter {
         router.showMenuScene();
     }
 
-    public void rowDidSelect(int row) {
-        router.showQueryScene(QueryType.valueOfRaw(row));
+    public void rowDidSelect(String query) {
+        router.showQueryScene(QueryType.valueOfQueryDescription(query));
     }
-
 }

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class QueriesView {
     private QueriesPresenter presenter;
@@ -47,7 +48,7 @@ public class QueriesView {
     //MARK: private methods
 
     private void setupView() {
-        this.queriesPanel.setPreferredSize(new Dimension(500, 500));
+        this.queriesPanel.setPreferredSize(new Dimension(600, 600));
         this.queriesPanel.setLayout(new GridBagLayout());
         this.queriesPanel.setBackground(Color.LIGHT_GRAY);
         this.setupSubComponents();
@@ -65,8 +66,8 @@ public class QueriesView {
 
         this.queriesTableModel.addColumn("Название запроса");
 
-        this.queriesTable.setPreferredSize(new Dimension(400, 400));
-        this.queriesScrollPane.setPreferredSize(new Dimension(450, 380));
+        this.queriesTable.setPreferredSize(new Dimension(500, 500));
+        this.queriesScrollPane.setPreferredSize(new Dimension(550, 480));
         this.queriesScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Запросы",
                 TitledBorder.CENTER,
@@ -77,7 +78,7 @@ public class QueriesView {
         this.queriesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.queriesTable.getSelectionModel().addListSelectionListener(event -> {
             if (event.getValueIsAdjusting()) {
-                presenter.rowDidSelect(queriesTable.getSelectedRow());
+                presenter.rowDidSelect((String) ((Vector)queriesTableModel.getDataVector().elementAt(queriesTable.getSelectedRow())).elementAt(0));
             }
         });
     }

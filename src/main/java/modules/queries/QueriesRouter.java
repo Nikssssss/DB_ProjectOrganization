@@ -10,7 +10,6 @@ import modules.roles.RolesAssembly;
 import modules.roles.views.UserRoleView;
 
 public class QueriesRouter {
-
     public void showMenuScene() {
         UserRoleView userRoleView = RolesAssembly.assemble();
         userRoleView.didLoad();
