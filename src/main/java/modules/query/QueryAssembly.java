@@ -1,6 +1,5 @@
 package modules.query;
 
-import common.DatabaseConnection;
 import modules.queries.enums.QueryType;
 
 public class QueryAssembly {

@@ -255,7 +255,6 @@ public class DataUpdater {
         resultSet.updateDate(5, insertingProjectData.getStartDate());
         resultSet.updateDate(6, insertingProjectData.getFinishDate());
         resultSet.insertRow();
-        connection.commit();
 
         resultSet.moveToCurrentRow();
         int projectId = resultSet.getInt(1);

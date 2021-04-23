@@ -73,7 +73,33 @@ public class AdminView implements UserRoleView {
         constraints.gridy = 1;
         panel.add(createDatabaseButton, constraints);
 
-        JButton clearDatabaseButton = new JButton("Очистить БД");
+        JButton removeDatabaseButton = new JButton("Удалить БД");
+        removeDatabaseButton.setPreferredSize(new Dimension(200, 100));
+        removeDatabaseButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                presenter.removeDatabaseButtonPressed();
+            }
+        });
+        constraints.gridx = 1;
+        constraints.insets.left = 30;
+        panel.add(removeDatabaseButton, constraints);
+
+        JButton fillDatabaseButton = new JButton("Заполнить данными");
+        fillDatabaseButton.setPreferredSize(new Dimension(200, 100));
+        fillDatabaseButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                presenter.fillDatabaseButtonPressed();
+            }
+        });
+        constraints.gridy = 2;
+        constraints.gridx = 0;
+        constraints.insets.left = 0;
+        constraints.insets.top = 10;
+        panel.add(fillDatabaseButton, constraints);
+
+        JButton clearDatabaseButton = new JButton("Очистить от данных");
         clearDatabaseButton.setPreferredSize(new Dimension(200, 100));
         clearDatabaseButton.addMouseListener(new MouseAdapter() {
             @Override

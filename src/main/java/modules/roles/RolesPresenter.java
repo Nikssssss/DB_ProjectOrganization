@@ -49,11 +49,40 @@ public class RolesPresenter {
 
     public void createDatabaseButtonPressed() {
         try {
-            interactor.initializeDatabase();
+            interactor.createDatabase();
         } catch (SQLException e) {
             if (e.getErrorCode() == 17081) {
                 e.printStackTrace();
                 Objects.requireNonNull(view.get()).setErrorMessage("База данных уже проинициализирована");
+            } else {
+                Objects.requireNonNull(view.get()).setErrorMessage(e.getMessage());
+            }
+        }
+    }
+
+    public void removeDatabaseButtonPressed() {
+        try {
+            interactor.removeDatabase();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 17081) {
+                Objects.requireNonNull(view.get()).setErrorMessage("База данных уже очищена");
+            } else {
+                Objects.requireNonNull(view.get()).setErrorMessage(e.getSQLState());
+            }
+        }
+    }
+
+    public void fillDatabaseButtonPressed() {
+        try {
+            interactor.initializeDatabase();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 17081) {
+                if (e.getMessage().contains("does not exist")) {
+                    Objects.requireNonNull(view.get()).setErrorMessage("База данных удалена");
+                } else {
+                    Objects.requireNonNull(view.get()).setErrorMessage("База данных уже проинициализирована");
+                }
+                e.printStackTrace();
             } else {
                 Objects.requireNonNull(view.get()).setErrorMessage(e.getMessage());
             }

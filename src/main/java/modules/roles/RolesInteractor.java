@@ -5,15 +5,25 @@ import services.QueriesExecutor;
 import java.sql.SQLException;
 
 public class RolesInteractor {
-    public void initializeDatabase() throws SQLException {
+    public void createDatabase() throws SQLException {
         QueriesExecutor.createTables();
         QueriesExecutor.createSequences();
         QueriesExecutor.createAutoincrementTriggers();
+    }
+
+    public void removeDatabase() throws SQLException {
+        QueriesExecutor.dropAllObjects();
+    }
+
+    public void initializeDatabase() throws SQLException {
         QueriesExecutor.initializeTables();
     }
 
     public void clearDatabase() throws SQLException {
         QueriesExecutor.dropAllObjects();
+        QueriesExecutor.createTables();
+        QueriesExecutor.createSequences();
+        QueriesExecutor.createAutoincrementTriggers();
     }
 
     public void checkDatabaseCreation() throws SQLException {

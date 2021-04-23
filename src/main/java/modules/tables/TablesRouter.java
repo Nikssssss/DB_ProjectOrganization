@@ -3,8 +3,6 @@ package modules.tables;
 import common.MainWindow;
 import modules.adding.AddingAssembly;
 import modules.adding.AddingView;
-import modules.main.MainAssembly;
-import modules.main.MainView;
 import modules.roles.RolesAssembly;
 import modules.roles.views.UserRoleView;
 import modules.tables.enums.TableType;
