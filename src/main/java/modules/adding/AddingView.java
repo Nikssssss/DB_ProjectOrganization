@@ -265,7 +265,8 @@ public class AddingView {
         addingPanel.setLayout(new GridBagLayout());
         addingPanel.setBackground(Color.LIGHT_GRAY);
 
-        String[] fieldNames = new String[]{"Имя", "Фамилия", "Дата устройства (гггг-мм-дд)", "Профессия", "Зарплата", "Возраст"};
+        String[] fieldNames = new String[]{"Имя", "Фамилия", "Дата устройства (гггг-мм-дд)",
+                "Профессия", "Зарплата", "Возраст", "Логин", "Пароль"};
         fieldComponents = new ArrayList<>();
         fieldLabels = new ArrayList<>();
         for (String fieldName: fieldNames) {

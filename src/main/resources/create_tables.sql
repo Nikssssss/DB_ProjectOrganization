@@ -61,7 +61,9 @@ CREATE TABLE Employees
 	hire_date            DATE NOT NULL ,
 	profession_id        NUMBER(2) NOT NULL ,
 	salary               NUMBER(6) NOT NULL ,
-	age                  NUMBER(2) NOT NULL
+	age                  NUMBER(2) NOT NULL ,
+	login                VARCHAR2(150) NOT NULL ,
+	password             VARCHAR2(150) NOT NULL
 );
 
 ALTER TABLE Employees

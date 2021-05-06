@@ -122,18 +122,25 @@ public class DataUpdater {
     }
 
     public static void insertEmployeesRow(ArrayList<String> insertingData, String employeeCategory, ResultSet resultSet) throws SQLException {
-        resultSet.moveToInsertRow();
-        EmployeeData employeeData = DataTransformer.getDatabaseEmployeesInsertingRowFrom(insertingData);
-        resultSet.updateString(2, employeeData.getFirstName());
-        resultSet.updateString(3, employeeData.getLastName());
-        resultSet.updateDate(4, employeeData.getHireDate());
-        resultSet.updateInt(5, employeeData.getProfessionId());
-        resultSet.updateInt(6, employeeData.getSalary());
-        resultSet.updateInt(7, employeeData.getAge());
-        resultSet.insertRow();
+        Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String query = "select employee_id, first_name, last_name, hire_date, profession_id, salary, age, login, password " +
+                "from employees";
+        ResultSet resultSet1 = statement.executeQuery(query);
+        resultSet1.moveToInsertRow();
 
-        resultSet.moveToCurrentRow();
-        int insertedEmployeeId = resultSet.getInt(1);
+        EmployeeData employeeData = DataTransformer.getDatabaseEmployeesInsertingRowFrom(insertingData);
+        resultSet1.updateString(2, employeeData.getFirstName());
+        resultSet1.updateString(3, employeeData.getLastName());
+        resultSet1.updateDate(4, employeeData.getHireDate());
+        resultSet1.updateInt(5, employeeData.getProfessionId());
+        resultSet1.updateInt(6, employeeData.getSalary());
+        resultSet1.updateInt(7, employeeData.getAge());
+        resultSet1.updateString(8, employeeData.getLogin());
+        resultSet1.updateString(9, employeeData.getPassword());
+        resultSet1.insertRow();
+
+        resultSet1.moveToCurrentRow();
+        int insertedEmployeeId = resultSet1.getInt(1);
         String categoryInsertQuery = "";
         String categoryField = insertingData.get(insertingData.size() - 1);
         switch (employeeCategory) {
@@ -158,9 +165,13 @@ public class DataUpdater {
                 categoryInsertQuery = "insert into managers values(" +
                         insertedEmployeeId + ", " + categoryField + ")";
                 break;
+            default:
+                categoryInsertQuery = null;
         }
-        Statement statement = connection.createStatement();
-        statement.execute(categoryInsertQuery);
+        if (categoryInsertQuery != null) {
+            Statement statement1 = connection.createStatement();
+            statement1.execute(categoryInsertQuery);
+        }
 
         connection.commit();
     }

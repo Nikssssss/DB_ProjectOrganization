@@ -16,11 +16,6 @@ public class LoginView {
     private final JButton loginButton = new JButton("Войти");
     private final JButton localTemplateButton = new JButton("Локальная БД");
     private final JButton remoteTemplateButton = new JButton("Удалённая БД");
-    private final ButtonGroup userRoleButtonGroup = new ButtonGroup();
-    private final JRadioButton directorRadioButton = new JRadioButton("Директор");
-    private final JRadioButton managerRadioButton = new JRadioButton("Управляющий");
-    private final JRadioButton hrRadioButton = new JRadioButton("HR");
-    private final JRadioButton adminRadioButton = new JRadioButton("Админ");
 
     public void setPresenter(LoginPresenter presenter) {
         this.presenter = presenter;
@@ -42,6 +37,15 @@ public class LoginView {
         this.setupView();
     }
 
+    public boolean hasBlankFields() {
+        for (JTextField textField: fieldTextFields) {
+            if (textField.getText() == null || textField.getText().equals("")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setLocalTemplateData() {
         for (int i = 0; i < fieldTextFields.size(); i++) {
             if (i == 0) {
@@ -50,7 +54,7 @@ public class LoginView {
                 fieldTextFields.get(i).setText("1521");
             } else if (i == 2) {
                 fieldTextFields.get(i).setText("nikita");
-            } else {
+            } else if (i == 3) {
                 fieldTextFields.get(i).setText("nikita2710");
             }
         }
@@ -64,20 +68,10 @@ public class LoginView {
                 fieldTextFields.get(i).setText("1521");
             } else if (i == 2) {
                 fieldTextFields.get(i).setText("18204_GUSEV");
-            } else {
+            } else if (i == 3) {
                 fieldTextFields.get(i).setText("nikita2710");
             }
         }
-    }
-
-    public String getUserRole() {
-        for (Enumeration<AbstractButton> buttons = userRoleButtonGroup.getElements(); buttons.hasMoreElements();) {
-            AbstractButton button = buttons.nextElement();
-            if (button.isSelected()) {
-                return button.getText();
-            }
-        }
-        return null;
     }
 
     //MARK: private methods
@@ -93,12 +87,14 @@ public class LoginView {
     private void setupSubComponents(){
         fieldLabels.add(new JLabel("IP-адрес"));
         fieldLabels.add(new JLabel("Порт"));
-        fieldLabels.add(new JLabel("Логин"));
-        fieldLabels.add(new JLabel("Пароль"));
+        fieldLabels.add(new JLabel("Логин в БД"));
+        fieldLabels.add(new JLabel("Пароль в БД"));
+        fieldLabels.add(new JLabel("Логин в системе"));
+        fieldLabels.add(new JLabel("Пароль в системе"));
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < fieldLabels.size(); i++) {
             JTextField textField;
-            if (i != 3) {
+            if (i != 3 && i != 5) {
                 textField = new JTextField();
             } else {
                 textField = new JPasswordField();
@@ -115,7 +111,9 @@ public class LoginView {
                 String port = fieldTextFields.get(1).getText();
                 String login = fieldTextFields.get(2).getText();
                 String password = fieldTextFields.get(3).getText();
-                presenter.loginButtonPressed(ip, port, login, password);
+                String systemLogin = fieldTextFields.get(4).getText();
+                String systemPassword = fieldTextFields.get(5).getText();
+                presenter.loginButtonPressed(ip, port, login, password, systemLogin, systemPassword);
             }
         });
 
@@ -134,15 +132,6 @@ public class LoginView {
                 presenter.remoteTemplateButtonPressed();
             }
         });
-
-        directorRadioButton.setActionCommand("Директор");
-        managerRadioButton.setActionCommand("Управляющий");
-        hrRadioButton.setActionCommand("HR");
-        adminRadioButton.setActionCommand("Админ");
-        userRoleButtonGroup.add(directorRadioButton);
-        userRoleButtonGroup.add(managerRadioButton);
-        userRoleButtonGroup.add(hrRadioButton);
-        userRoleButtonGroup.add(adminRadioButton);
     }
 
     private void placeSubComponents() {
@@ -176,22 +165,6 @@ public class LoginView {
         int lastTextFieldGridY = 2 * fieldTextFields.size();
 
         constraints.gridy = lastTextFieldGridY + 1;
-        constraints.insets.top = 20;
-        loginPanel.add(directorRadioButton, constraints);
-
-        constraints.gridy = lastTextFieldGridY + 2;
-        constraints.insets.top = 10;
-        loginPanel.add(managerRadioButton, constraints);
-
-        constraints.gridy = lastTextFieldGridY + 3;
-        constraints.insets.top = 10;
-        loginPanel.add(hrRadioButton, constraints);
-
-        constraints.gridy = lastTextFieldGridY + 4;
-        constraints.insets.top = 10;
-        loginPanel.add(adminRadioButton, constraints);
-
-        constraints.gridy = lastTextFieldGridY + 5;
         constraints.insets.top = 30;
         loginPanel.add(loginButton, constraints);
     }

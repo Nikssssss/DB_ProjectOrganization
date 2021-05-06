@@ -377,6 +377,19 @@ public class QueriesExecutor {
         return statement.executeQuery(query);
     }
 
+    public static String getEmployeeProfession(String login, String password) throws SQLException {
+        Statement statement = connection.createStatement();
+        String query = "select profession_name from employees " +
+                "inner join professions using(profession_id) " +
+                "where login = '" + login + "' and password = '" + password + "'";
+        ResultSet resultSet = statement.executeQuery(query);
+        if (resultSet.next()) {
+            return resultSet.getString(1);
+        } else {
+            return null;
+        }
+    }
+
     public static String getProjectIdBy(String projectName) throws SQLException {
         Statement statement = connection.createStatement();
         String query = "select project_id from projects where project_name = '" + projectName + "'";

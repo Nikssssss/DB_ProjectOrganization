@@ -10,8 +10,11 @@ public class EmployeeData {
     private final int professionId;
     private final int salary;
     private final int age;
+    private final String login;
+    private final String password;
 
-    public EmployeeData(Integer employeeId, String firstName, String lastName, Date hireDate, int professionId, int salary, int age) {
+    public EmployeeData(Integer employeeId, String firstName, String lastName, Date hireDate,
+                        int professionId, int salary, int age, String login, String password) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,6 +22,8 @@ public class EmployeeData {
         this.professionId = professionId;
         this.salary = salary;
         this.age = age;
+        this.login = login;
+        this.password = password;
     }
 
     public int getEmployeeId() {
@@ -47,5 +52,13 @@ public class EmployeeData {
 
     public int getAge() {
         return age;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
