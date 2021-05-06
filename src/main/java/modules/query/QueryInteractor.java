@@ -35,6 +35,7 @@ public class QueryInteractor {
             }
             case EQUIPMENT_OF_PROJECT:
             case EMPLOYEES_OF_PROJECT:
+            case PROJECT_ROSTER_COUNT:
             case CONTRACT_OF_PROJECT: {
                 ArrayList<String> projects = QueriesExecutor.getAllProjects();
                 comboBoxData.add(projects);
@@ -78,6 +79,27 @@ public class QueryInteractor {
             case DEPARTMENT_MANAGERS: {
                 return this.getDepartmentManagersColumns();
             }
+            case COST_OF_PROJECTS: {
+                return this.getCostOfProjectsColumns();
+            }
+            case SUBPROJECTS_LIST: {
+                return this.getSubprojectsListColumns();
+            }
+            case SUBPROJECTS_COST: {
+                return this.getSubprojectsCostColumns();
+            }
+            case PROJECT_ROSTER_COUNT: {
+                return this.getProjectRosterCountColumns();
+            }
+            case EQUIPMENT_EFFICIENCY: {
+                return this.getEquipmentEfficiencyColumns();
+            }
+            case CONTRACT_EFFICIENCY: {
+                return this.getContractEfficiencyColumns();
+            }
+            case PROJECT_EFFICIENCY: {
+                return this.getProjectEfficiencyColumns();
+            }
             default: {
                 return null;
             }
@@ -112,6 +134,27 @@ public class QueryInteractor {
             }
             case DEPARTMENT_MANAGERS: {
                 return this.executeDepartmentManagersQuery(queryParameters);
+            }
+            case COST_OF_PROJECTS: {
+                return this.executeCostOfProjectsQuery(queryParameters);
+            }
+            case SUBPROJECTS_LIST: {
+                return this.executeSubprojectsListQuery(queryParameters);
+            }
+            case SUBPROJECTS_COST: {
+                return this.executeSubprojectsCostQuery(queryParameters);
+            }
+            case PROJECT_ROSTER_COUNT: {
+                return this.executeProjectRosterCountQuery(queryParameters);
+            }
+            case EQUIPMENT_EFFICIENCY: {
+                return this.executeEquipmentEfficiencyQuery(queryParameters);
+            }
+            case CONTRACT_EFFICIENCY: {
+                return this.executeContractEfficiencyQuery(queryParameters);
+            }
+            case PROJECT_EFFICIENCY: {
+                return this.executeProjectEfficiencyQuery(queryParameters);
             }
             default: {
                 return null;
@@ -190,6 +233,51 @@ public class QueryInteractor {
         ArrayList<String> organizationRosterColumns = new ArrayList<>();
         organizationRosterColumns.add("Отдел");
         organizationRosterColumns.add("Руководитель");
+        return organizationRosterColumns;
+    }
+
+    private ArrayList<String> getCostOfProjectsColumns() {
+        ArrayList<String> organizationRosterColumns = new ArrayList<>();
+        organizationRosterColumns.add("Стоимость");
+        return organizationRosterColumns;
+    }
+
+    private ArrayList<String> getSubprojectsListColumns() {
+        ArrayList<String> organizationRosterColumns = new ArrayList<>();
+        organizationRosterColumns.add("Проект");
+        return organizationRosterColumns;
+    }
+
+    private ArrayList<String> getSubprojectsCostColumns() {
+        ArrayList<String> organizationRosterColumns = new ArrayList<>();
+        organizationRosterColumns.add("Стоимость");
+        return organizationRosterColumns;
+    }
+
+    private ArrayList<String> getProjectRosterCountColumns() {
+        ArrayList<String> organizationRosterColumns = new ArrayList<>();
+        organizationRosterColumns.add("Количество сотрудников");
+        return organizationRosterColumns;
+    }
+
+    private ArrayList<String> getEquipmentEfficiencyColumns() {
+        ArrayList<String> organizationRosterColumns = new ArrayList<>();
+        organizationRosterColumns.add("Оборудование");
+        organizationRosterColumns.add("Количество проектов");
+        return organizationRosterColumns;
+    }
+
+    private ArrayList<String> getContractEfficiencyColumns() {
+        ArrayList<String> organizationRosterColumns = new ArrayList<>();
+        organizationRosterColumns.add("Договор");
+        organizationRosterColumns.add("Эффективность (стоимость на сотрудника)");
+        return organizationRosterColumns;
+    }
+
+    private ArrayList<String> getProjectEfficiencyColumns() {
+        ArrayList<String> organizationRosterColumns = new ArrayList<>();
+        organizationRosterColumns.add("Проект");
+        organizationRosterColumns.add("Эффективность (стоимость на сотрудника)");
         return organizationRosterColumns;
     }
 
@@ -422,6 +510,162 @@ public class QueryInteractor {
                     employee)));
         }
         resultSet.close();
+
+        return queryResult;
+    }
+
+    private ArrayList<ArrayList<String>> executeCostOfProjectsQuery(ArrayList<String> queryParameters) throws SQLException {
+        String query = "select sum(project_cost) from projects where";
+        if (!queryParameters.get(0).equals("")) {
+            query += unionWordFor(query) + "finish_date >= to_date('" + queryParameters.get(0) + "', 'yyyy-mm-dd')";
+        }
+        if (!queryParameters.get(1).equals("")) {
+            query += unionWordFor(query) + "finish_date <= to_date('" + queryParameters.get(1) + "', 'yyyy-mm-dd')";
+        }
+        if (query.endsWith(" where")) {
+            query = query.substring(0, query.indexOf(" where"));
+        }
+        ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
+
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        while (resultSet.next()) {
+            queryResult.add(new ArrayList<>(Collections.singletonList(resultSet.getString(1))));
+        }
+        resultSet.close();
+
+        return queryResult;
+    }
+
+    private ArrayList<ArrayList<String>> executeSubprojectsListQuery(ArrayList<String> queryParameters) throws SQLException {
+        String query = "select project_name from subcontracts_projects inner join projects using(project_id)";
+        ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
+
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        while (resultSet.next()) {
+            queryResult.add(new ArrayList<>(Collections.singletonList(resultSet.getString(1))));
+        }
+        resultSet.close();
+
+        return queryResult;
+    }
+
+    private ArrayList<ArrayList<String>> executeSubprojectsCostQuery(ArrayList<String> queryParameters) throws SQLException {
+        String query = "select sum(project_cost) from subcontracts_projects inner join projects using(project_id)";
+        ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
+
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        while (resultSet.next()) {
+            queryResult.add(new ArrayList<>(Collections.singletonList(resultSet.getString(1))));
+        }
+        resultSet.close();
+
+        return queryResult;
+    }
+
+    private ArrayList<ArrayList<String>> executeProjectRosterCountQuery(ArrayList<String> queryParameters) throws SQLException {
+        String query = "select count(employee_id) from projects_employees " +
+                "inner join projects using(project_id) " +
+                "where project_name = '" + queryParameters.get(0) + "'";
+        ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
+
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        while (resultSet.next()) {
+            queryResult.add(new ArrayList<>(Collections.singletonList(resultSet.getString(1))));
+        }
+        resultSet.close();
+
+        return queryResult;
+    }
+
+    private ArrayList<ArrayList<String>> executeEquipmentEfficiencyQuery(ArrayList<String> queryParameters) throws SQLException {
+        String query = "select equipment_name, count(equipment_id) from equipment_projects " +
+                "inner join equipment using(equipment_id) " +
+                "group by project_id, equipment_name, equipment_type_id, department_id";
+        ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
+
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        while (resultSet.next()) {
+            queryResult.add(new ArrayList<>(Arrays.asList(resultSet.getString(1), resultSet.getString(2))));
+        }
+        resultSet.close();
+
+        return queryResult;
+    }
+
+    private ArrayList<ArrayList<String>> executeContractEfficiencyQuery(ArrayList<String> queryParameters) throws SQLException {
+        String query = "select contract_name from contracts";
+        ResultSet contractNameResultSet = QueriesExecutor.executeBusinessQuery(query);
+
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        while (contractNameResultSet.next()) {
+            queryResult.add(new ArrayList<>(Collections.singletonList(contractNameResultSet.getString(1))));
+        }
+        contractNameResultSet.close();
+
+        query = "select contract_id, sum(project_cost) from projects_contracts " +
+                "right outer join projects using(project_id) " +
+                "group by contract_id " +
+                "order by contract_id";
+        ResultSet contractCostResultSet = QueriesExecutor.executeBusinessQuery(query);
+        ArrayList<Integer> costResult = new ArrayList<>();
+        while (contractCostResultSet.next()) {
+            costResult.add(contractCostResultSet.getInt(2));
+        }
+        contractCostResultSet.close();
+
+        query = "select contract_id, count(employee_id) from projects_contracts " +
+                "right outer join projects_employees using(project_id) " +
+                "group by contract_id " +
+                "order by contract_id";
+        ResultSet employeesCountResultSet = QueriesExecutor.executeBusinessQuery(query);
+        ArrayList<Integer> countResult = new ArrayList<>();
+        while (employeesCountResultSet.next()) {
+            countResult.add(employeesCountResultSet.getInt(2));
+        }
+        employeesCountResultSet.close();
+
+        int currentRow = 0;
+        for (ArrayList<String> resultRow: queryResult) {
+            resultRow.add(String.valueOf((double) costResult.get(currentRow) / countResult.get(currentRow)));
+            currentRow++;
+        }
+
+        return queryResult;
+    }
+
+    private ArrayList<ArrayList<String>> executeProjectEfficiencyQuery(ArrayList<String> queryParameters) throws SQLException {
+        String query = "select project_name from projects";
+        ResultSet projectNameResultSet = QueriesExecutor.executeBusinessQuery(query);
+
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        while (projectNameResultSet.next()) {
+            queryResult.add(new ArrayList<>(Collections.singletonList(projectNameResultSet.getString(1))));
+        }
+        projectNameResultSet.close();
+
+        query = "select project_cost from projects";
+        ResultSet projectCostResultSet = QueriesExecutor.executeBusinessQuery(query);
+        ArrayList<Integer> costResult = new ArrayList<>();
+        while (projectCostResultSet.next()) {
+            costResult.add(projectCostResultSet.getInt(1));
+        }
+        projectCostResultSet.close();
+
+        query = "select count(employee_id) from projects_employees " +
+                "group by project_id " +
+                "order by project_id";
+        ResultSet employeesCountResultSet = QueriesExecutor.executeBusinessQuery(query);
+        ArrayList<Integer> countResult = new ArrayList<>();
+        while (employeesCountResultSet.next()) {
+            countResult.add(employeesCountResultSet.getInt(1));
+        }
+        employeesCountResultSet.close();
+
+        int currentRow = 0;
+        for (ArrayList<String> resultRow: queryResult) {
+            resultRow.add(String.valueOf((double) costResult.get(currentRow) / countResult.get(currentRow)));
+            currentRow++;
+        }
 
         return queryResult;
     }

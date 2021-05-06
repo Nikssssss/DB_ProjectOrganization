@@ -124,6 +124,14 @@ public class QueryView {
                 this.setupEmployeesOfProjectQueryParameters(comboBoxData);
                 break;
             }
+            case COST_OF_PROJECTS: {
+                this.setupCostOfProjectsQueryParameters();
+                break;
+            }
+            case PROJECT_ROSTER_COUNT: {
+                this.setupProjectRosterCountQueryParameters(comboBoxData);
+                break;
+            }
         }
 
         this.executeQueryButton.setPreferredSize(new Dimension(400, 40));
@@ -235,6 +243,29 @@ public class QueryView {
     }
 
     private void setupEmployeesOfProjectQueryParameters(ArrayList<ArrayList<String>> comboBoxData) {
+        String[] fieldNames = new String[]{"Проект"};
+        for (String fieldName: fieldNames) {
+            parameterLabels.add(new JLabel(fieldName));
+            JComboBox<String> projectsComboBox = new JComboBox<>();
+            ArrayList<String> projects = comboBoxData.get(0);
+            for (String project: projects) {
+                projectsComboBox.addItem(project);
+            }
+            parameterComponents.add(projectsComboBox);
+        }
+    }
+
+    private void setupCostOfProjectsQueryParameters() {
+        String[] fieldNames = new String[]{"Дата начала (гггг-мм-дд)", "Дата окончания (гггг-мм-дд)"};
+        for (String fieldName: fieldNames) {
+            parameterLabels.add(new JLabel(fieldName));
+            JTextField textField = new JTextField();
+            textField.setPreferredSize(new Dimension(180, 35));
+            parameterComponents.add(textField);
+        }
+    }
+
+    private void setupProjectRosterCountQueryParameters(ArrayList<ArrayList<String>> comboBoxData) {
         String[] fieldNames = new String[]{"Проект"};
         for (String fieldName: fieldNames) {
             parameterLabels.add(new JLabel(fieldName));

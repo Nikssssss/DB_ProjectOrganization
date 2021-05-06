@@ -17,6 +17,10 @@ public class QueriesInteractor {
                 queryTypes.add(QueryType.EQUIPMENT_OF_PROJECT);
                 queryTypes.add(QueryType.EMPLOYEES_OF_PROJECT);
                 queryTypes.add(QueryType.EQUIPMENT_PROJECTS);
+                queryTypes.add(QueryType.COST_OF_PROJECTS);
+                queryTypes.add(QueryType.SUBPROJECTS_LIST);
+                queryTypes.add(QueryType.SUBPROJECTS_COST);
+                queryTypes.add(QueryType.PROJECT_ROSTER_COUNT);
                 break;
             }
             case HR: {
@@ -34,6 +38,13 @@ public class QueriesInteractor {
                 queryTypes.add(QueryType.EQUIPMENT_OF_PROJECT);
                 queryTypes.add(QueryType.EMPLOYEES_OF_PROJECT);
                 queryTypes.add(QueryType.EQUIPMENT_PROJECTS);
+                queryTypes.add(QueryType.COST_OF_PROJECTS);
+                queryTypes.add(QueryType.SUBPROJECTS_LIST);
+                queryTypes.add(QueryType.SUBPROJECTS_COST);
+                queryTypes.add(QueryType.PROJECT_ROSTER_COUNT);
+                queryTypes.add(QueryType.EQUIPMENT_EFFICIENCY);
+                queryTypes.add(QueryType.CONTRACT_EFFICIENCY);
+                queryTypes.add(QueryType.PROJECT_EFFICIENCY);
                 break;
             }
         }
