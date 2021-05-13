@@ -52,10 +52,6 @@ public class LoginView {
                 fieldTextFields.get(i).setText("192.168.0.6");
             } else if (i == 1) {
                 fieldTextFields.get(i).setText("1521");
-            } else if (i == 2) {
-                fieldTextFields.get(i).setText("nikita");
-            } else if (i == 3) {
-                fieldTextFields.get(i).setText("nikita2710");
             }
         }
     }
@@ -66,10 +62,6 @@ public class LoginView {
                 fieldTextFields.get(i).setText("84.237.50.81");
             } else if (i == 1) {
                 fieldTextFields.get(i).setText("1521");
-            } else if (i == 2) {
-                fieldTextFields.get(i).setText("18204_GUSEV");
-            } else if (i == 3) {
-                fieldTextFields.get(i).setText("nikita2710");
             }
         }
     }
@@ -87,14 +79,12 @@ public class LoginView {
     private void setupSubComponents(){
         fieldLabels.add(new JLabel("IP-адрес"));
         fieldLabels.add(new JLabel("Порт"));
-        fieldLabels.add(new JLabel("Логин в БД"));
-        fieldLabels.add(new JLabel("Пароль в БД"));
-        fieldLabels.add(new JLabel("Логин в системе"));
-        fieldLabels.add(new JLabel("Пароль в системе"));
+        fieldLabels.add(new JLabel("Логин"));
+        fieldLabels.add(new JLabel("Пароль"));
 
         for (int i = 0; i < fieldLabels.size(); i++) {
             JTextField textField;
-            if (i != 3 && i != 5) {
+            if (i != 3) {
                 textField = new JTextField();
             } else {
                 textField = new JPasswordField();
@@ -111,9 +101,7 @@ public class LoginView {
                 String port = fieldTextFields.get(1).getText();
                 String login = fieldTextFields.get(2).getText();
                 String password = fieldTextFields.get(3).getText();
-                String systemLogin = fieldTextFields.get(4).getText();
-                String systemPassword = fieldTextFields.get(5).getText();
-                presenter.loginButtonPressed(ip, port, login, password, systemLogin, systemPassword);
+                presenter.loginButtonPressed(ip, port, login, password);
             }
         });
 

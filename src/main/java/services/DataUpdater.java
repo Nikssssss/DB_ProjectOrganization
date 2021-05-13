@@ -124,7 +124,7 @@ public class DataUpdater {
     public static void insertEmployeesRow(ArrayList<String> insertingData, String employeeCategory, ResultSet resultSet) throws SQLException {
         Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         String query = "select employee_id, first_name, last_name, hire_date, profession_id, salary, age, login, password " +
-                "from employees";
+                "from ngusev1.employees";
         ResultSet resultSet1 = statement.executeQuery(query);
         resultSet1.moveToInsertRow();
 
@@ -135,8 +135,6 @@ public class DataUpdater {
         resultSet1.updateInt(5, employeeData.getProfessionId());
         resultSet1.updateInt(6, employeeData.getSalary());
         resultSet1.updateInt(7, employeeData.getAge());
-        resultSet1.updateString(8, employeeData.getLogin());
-        resultSet1.updateString(9, employeeData.getPassword());
         resultSet1.insertRow();
 
         resultSet1.moveToCurrentRow();
@@ -146,23 +144,23 @@ public class DataUpdater {
         switch (employeeCategory) {
             case "Техник":
                 String equipmentId = DataTransformer.getDatabaseEquipmentTypeIdBy(categoryField);
-                categoryInsertQuery = "insert into technics values(" +
+                categoryInsertQuery = "insert into ngusev1.technics values(" +
                         insertedEmployeeId + ", " + equipmentId + ")";
                 break;
             case "Инженер":
-                categoryInsertQuery = "insert into engineers values(" +
+                categoryInsertQuery = "insert into ngusev1.engineers values(" +
                         insertedEmployeeId + ", '" + categoryField + "')";
                 break;
             case "Конструктор":
-                categoryInsertQuery = "insert into constructors values(" +
+                categoryInsertQuery = "insert into ngusev1.constructors values(" +
                         insertedEmployeeId + ", " + categoryField + ")";
                 break;
             case "Бухгалтер":
-                categoryInsertQuery = "insert into accountants values(" +
+                categoryInsertQuery = "insert into ngusev1.accountants values(" +
                         insertedEmployeeId + ", '" + categoryField + "')";
                 break;
             case "Менеджер":
-                categoryInsertQuery = "insert into managers values(" +
+                categoryInsertQuery = "insert into ngusev1.managers values(" +
                         insertedEmployeeId + ", " + categoryField + ")";
                 break;
             default:
@@ -273,16 +271,16 @@ public class DataUpdater {
         Statement statement = connection.createStatement();
         String query;
         for (Integer employeeId: insertingProjectData.getEmployees()) {
-            query = "insert into projects_employees values(" + employeeId + ", " + projectId + ")";
+            query = "insert into ngusev1.projects_employees values(" + employeeId + ", " + projectId + ")";
             statement.execute(query);
         }
 
         for (Integer equipmentId: insertingProjectData.getEquipment()) {
-            query = "insert into equipment_projects values(" + equipmentId + ", " + projectId + ")";
+            query = "insert into ngusev1.equipment_projects values(" + equipmentId + ", " + projectId + ")";
             statement.execute(query);
         }
 
-        query = "insert into projects_contracts values(" + projectId + ", " + insertingProjectData.getContractId() + ")";
+        query = "insert into ngusev1.projects_contracts values(" + projectId + ", " + insertingProjectData.getContractId() + ")";
         statement.execute(query);
 
         connection.commit();
@@ -303,7 +301,7 @@ public class DataUpdater {
         int projectId = resultSet.getInt(1);
 
         Statement statement = connection.createStatement();
-        String query = "insert into subcontracts_projects values(" + projectId + ", " + insertingProjectData.getContractId() + ")";
+        String query = "insert into ngusev1.subcontracts_projects values(" + projectId + ", " + insertingProjectData.getContractId() + ")";
         statement.execute(query);
 
         connection.commit();
@@ -314,7 +312,7 @@ public class DataUpdater {
         Statement statement = connection.createStatement();
         String projectId = (String) insertingData.get(0);
         String contractId = (String) insertingData.get(1);
-        String query = "insert into projects_contracts values(" + projectId + ", " + contractId + ")";
+        String query = "insert into ngusev1.projects_contracts values(" + projectId + ", " + contractId + ")";
         statement.execute(query);
         connection.commit();
         statement.close();
@@ -324,7 +322,7 @@ public class DataUpdater {
         Statement statement = connection.createStatement();
         String projectId = (String) insertingData.get(0);
         String contractId = (String) insertingData.get(1);
-        String query = "insert into subcontracts_projects values(" + projectId + ", " + contractId + ")";
+        String query = "insert into ngusev1.subcontracts_projects values(" + projectId + ", " + contractId + ")";
         statement.execute(query);
         connection.commit();
         statement.close();

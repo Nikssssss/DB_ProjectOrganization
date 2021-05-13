@@ -9,9 +9,11 @@ public class RolesInteractor {
         QueriesExecutor.createTables();
         QueriesExecutor.createSequences();
         QueriesExecutor.createAutoincrementTriggers();
+        QueriesExecutor.createRoles();
     }
 
     public void removeDatabase() throws SQLException {
+        QueriesExecutor.deleteAllUsers();
         QueriesExecutor.dropAllObjects();
     }
 
@@ -20,6 +22,7 @@ public class RolesInteractor {
     }
 
     public void clearDatabase() throws SQLException {
+        QueriesExecutor.deleteAllUsers();
         QueriesExecutor.dropAllObjects();
         QueriesExecutor.createTables();
         QueriesExecutor.createSequences();

@@ -20,7 +20,8 @@ public class TablesAssembly {
         String[] entities = new String[]{};
         switch (CurrentUserRole.getUserRole()) {
             case HR: {
-                entities = new String[]{"Сотрудники", "Техники", "Инженеры", "Конструкторы", "Бухгалтеры", "Менеджеры"};
+                entities = new String[]{"Сотрудники", "Техники", "Инженеры",
+                        "Конструкторы", "Бухгалтеры", "Менеджеры"};
                 break;
             }
             case ADMIN: {

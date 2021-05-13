@@ -297,7 +297,7 @@ public class QueryInteractor {
                 queryParameters.get(4),
                 queryParameters.get(5),
                 queryParameters.get(6));
-        String query = "select * from employees where";
+        String query = "select * from ngusev1.employees where";
         if (!organizationRosterData.getProfession().equals("Все профессии")) {
             query += " profession_id = " + DataTransformer.getDatabaseProfessionIdBy(organizationRosterData.getProfession());
         }
@@ -346,7 +346,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeContractsListQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select contract_name, start_date, finish_date from contracts where";
+        String query = "select contract_name, start_date, finish_date from ngusev1.contracts where";
         if (!queryParameters.get(0).equals("")) {
             query += unionWordFor(query) + "finish_date >= to_date('" + queryParameters.get(0) + "', 'yyyy-mm-dd')";
         }
@@ -373,7 +373,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeProjectsListQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select project_name, start_date, finish_date from projects where";
+        String query = "select project_name, start_date, finish_date from ngusev1.projects where";
         if (!queryParameters.get(0).equals("")) {
             query += unionWordFor(query) + "finish_date >= to_date('" + queryParameters.get(0) + "', 'yyyy-mm-dd')";
         }
@@ -400,9 +400,9 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeEquipmentProjectsQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select equipment_name, project_name, start_date, finish_date from equipment_projects " +
-                "inner join projects using(project_id) " +
-                "inner join equipment using(equipment_id) " +
+        String query = "select equipment_name, project_name, start_date, finish_date from ngusev1.equipment_projects " +
+                "inner join ngusev1.projects using(project_id) " +
+                "inner join ngusev1.equipment using(equipment_id) " +
                 "where";
         if (!queryParameters.get(0).equals("")) {
             query += unionWordFor(query) + "finish_date >= to_date('" + queryParameters.get(0) + "', 'yyyy-mm-dd')";
@@ -431,9 +431,9 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeProjectsOfContractQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select contract_name, project_name from projects_contracts " +
-                "inner join contracts using(contract_id) " +
-                "inner join projects using(project_id) " +
+        String query = "select contract_name, project_name from ngusev1.projects_contracts " +
+                "inner join ngusev1.contracts using(contract_id) " +
+                "inner join ngusev1.projects using(project_id) " +
                 "where contract_name = '" + queryParameters.get(0) + "'";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
@@ -448,9 +448,9 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeContractOfProjectQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select project_name, contract_name from projects_contracts " +
-                "inner join contracts using(contract_id) " +
-                "inner join projects using(project_id) " +
+        String query = "select project_name, contract_name from ngusev1.projects_contracts " +
+                "inner join ngusev1.contracts using(contract_id) " +
+                "inner join ngusev1.projects using(project_id) " +
                 "where project_name = '" + queryParameters.get(0) + "'";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
@@ -465,9 +465,9 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeEquipmentOfProjectQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select project_name, equipment_name from equipment_projects " +
-                "inner join equipment using(equipment_id) " +
-                "inner join projects using(project_id) " +
+        String query = "select project_name, equipment_name from ngusev1.equipment_projects " +
+                "inner join ngusev1.equipment using(equipment_id) " +
+                "inner join ngusev1.projects using(project_id) " +
                 "where project_name = '" + queryParameters.get(0) + "'";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
@@ -482,9 +482,9 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeEmployeesOfProjectQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select project_name, employee_id from projects_employees " +
-                "inner join employees using(employee_id) " +
-                "inner join projects using(project_id) " +
+        String query = "select project_name, employee_id from ngusev1.projects_employees " +
+                "inner join ngusev1.employees using(employee_id) " +
+                "inner join ngusev1.projects using(project_id) " +
                 "where project_name = '" + queryParameters.get(0) + "'";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
@@ -500,7 +500,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeDepartmentManagersQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select department_name, manager_id from departments";
+        String query = "select department_name, manager_id from ngusev1.departments";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
         ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
@@ -515,7 +515,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeCostOfProjectsQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select sum(project_cost) from projects where";
+        String query = "select sum(project_cost) from ngusev1.projects where";
         if (!queryParameters.get(0).equals("")) {
             query += unionWordFor(query) + "finish_date >= to_date('" + queryParameters.get(0) + "', 'yyyy-mm-dd')";
         }
@@ -537,7 +537,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeSubprojectsListQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select project_name from subcontracts_projects inner join projects using(project_id)";
+        String query = "select project_name from ngusev1.subcontracts_projects inner join ngusev1.projects using(project_id)";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
         ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
@@ -550,7 +550,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeSubprojectsCostQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select sum(project_cost) from subcontracts_projects inner join projects using(project_id)";
+        String query = "select sum(project_cost) from ngusev1.subcontracts_projects inner join ngusev1.projects using(project_id)";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
         ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
@@ -563,8 +563,8 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeProjectRosterCountQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select count(employee_id) from projects_employees " +
-                "inner join projects using(project_id) " +
+        String query = "select count(employee_id) from ngusev1.projects_employees " +
+                "inner join ngusev1.projects using(project_id) " +
                 "where project_name = '" + queryParameters.get(0) + "'";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
@@ -578,8 +578,8 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeEquipmentEfficiencyQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select equipment_name, count(equipment_id) from equipment_projects " +
-                "inner join equipment using(equipment_id) " +
+        String query = "select equipment_name, count(equipment_id) from ngusev1.equipment_projects " +
+                "inner join ngusev1.equipment using(equipment_id) " +
                 "group by project_id, equipment_name, equipment_type_id, department_id";
         ResultSet resultSet = QueriesExecutor.executeBusinessQuery(query);
 
@@ -593,7 +593,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeContractEfficiencyQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select contract_name from contracts";
+        String query = "select contract_name from ngusev1.contracts";
         ResultSet contractNameResultSet = QueriesExecutor.executeBusinessQuery(query);
 
         ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
@@ -602,8 +602,8 @@ public class QueryInteractor {
         }
         contractNameResultSet.close();
 
-        query = "select contract_id, sum(project_cost) from projects_contracts " +
-                "right outer join projects using(project_id) " +
+        query = "select contract_id, sum(project_cost) from ngusev1.projects_contracts " +
+                "right outer join ngusev1.projects using(project_id) " +
                 "group by contract_id " +
                 "order by contract_id";
         ResultSet contractCostResultSet = QueriesExecutor.executeBusinessQuery(query);
@@ -613,8 +613,8 @@ public class QueryInteractor {
         }
         contractCostResultSet.close();
 
-        query = "select contract_id, count(employee_id) from projects_contracts " +
-                "right outer join projects_employees using(project_id) " +
+        query = "select contract_id, count(employee_id) from ngusev1.projects_contracts " +
+                "right outer join ngusev1.projects_employees using(project_id) " +
                 "group by contract_id " +
                 "order by contract_id";
         ResultSet employeesCountResultSet = QueriesExecutor.executeBusinessQuery(query);
@@ -634,7 +634,7 @@ public class QueryInteractor {
     }
 
     private ArrayList<ArrayList<String>> executeProjectEfficiencyQuery(ArrayList<String> queryParameters) throws SQLException {
-        String query = "select project_name from projects";
+        String query = "select project_name from ngusev1.projects";
         ResultSet projectNameResultSet = QueriesExecutor.executeBusinessQuery(query);
 
         ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
@@ -643,7 +643,7 @@ public class QueryInteractor {
         }
         projectNameResultSet.close();
 
-        query = "select project_cost from projects";
+        query = "select project_cost from ngusev1.projects";
         ResultSet projectCostResultSet = QueriesExecutor.executeBusinessQuery(query);
         ArrayList<Integer> costResult = new ArrayList<>();
         while (projectCostResultSet.next()) {
@@ -651,7 +651,7 @@ public class QueryInteractor {
         }
         projectCostResultSet.close();
 
-        query = "select count(employee_id) from projects_employees " +
+        query = "select count(employee_id) from ngusev1.projects_employees " +
                 "group by project_id " +
                 "order by project_id";
         ResultSet employeesCountResultSet = QueriesExecutor.executeBusinessQuery(query);

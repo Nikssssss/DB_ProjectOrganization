@@ -316,8 +316,8 @@ public class DataTransformer {
                 Integer.parseInt(readableRowData.get(4)),
                 Integer.parseInt(readableRowData.get(5)),
                 Integer.parseInt(readableRowData.get(6)),
-                readableRowData.get(7),
-                readableRowData.get(8));
+                null,
+                null);
     }
 
     public static DepartmentData getDatabaseDepartmentsExistingRowFrom(ArrayList<String> readableRowData) {
@@ -409,8 +409,8 @@ public class DataTransformer {
                 Integer.parseInt(readableRowData.get(3)),
                 Integer.parseInt(readableRowData.get(4)),
                 Integer.parseInt(readableRowData.get(5)),
-                readableRowData.get(6),
-                readableRowData.get(7));
+                null,
+                null);
     }
 
     public static DepartmentData getDatabaseDepartmentsInsertingRowFrom(ArrayList<String> readableRowData) {

@@ -2,7 +2,6 @@ insert into departments(department_name) values('Инжиниринг');
 insert into departments(department_name) values('Финансы');
 insert into departments(department_name) values('HR');
 insert into departments(department_name) values('Директорат');
-insert into departments(department_name) values('Тех. обслуживание');
 
 insert into professions(profession_name, management_ability, department_id) values('Техник', 0, 1);
 insert into professions(profession_name, management_ability, department_id) values('Инженер', 1, 1);
@@ -10,32 +9,55 @@ insert into professions(profession_name, management_ability, department_id) valu
 insert into professions(profession_name, management_ability, department_id) values('Бухгалтер', 0, 2);
 insert into professions(profession_name, management_ability, department_id) values('Менеджер', 0, 3);
 insert into professions(profession_name, management_ability, department_id) values('Директор', 0, 4);
-insert into professions(profession_name, management_ability, department_id) values('Админ', 0, 5);
 
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Слава', 'Стёпин', to_date('29.10.2008', 'DD.MM.YYYY'), 1, 40000, 25, 's_stepin', '123');
+       values('Слава', 'Стёпин', to_date('29.10.2008', 'DD.MM.YYYY'), 1, 40000, 25, 'sstepinng', '123');
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Никита', 'Повер', to_date('23.09.2012', 'DD.MM.YYYY'), 2, 70000, 35, 'n_pover', '123');
+       values('Никита', 'Повер', to_date('23.09.2012', 'DD.MM.YYYY'), 2, 70000, 35, 'npoverng', '123');
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Михаил', 'Лерн', to_date('06.05.2020', 'DD.MM.YYYY'), 2, 80000, 32, 'm_lern', '123');
+       values('Михаил', 'Лерн', to_date('06.05.2020', 'DD.MM.YYYY'), 2, 80000, 32, 'mlernng', '123');
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Аркадий', 'Истер', to_date('07.04.2004', 'DD.MM.YYYY'), 3, 50000, 29, 'a_ister', '123');
+       values('Аркадий', 'Истер', to_date('07.04.2004', 'DD.MM.YYYY'), 3, 50000, 29, 'aisterng', '123');
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Миша', 'Лидев', to_date('15.11.2015', 'DD.MM.YYYY'), 3, 60000, 37, 'm_lidev', '123');
+       values('Миша', 'Лидев', to_date('15.11.2015', 'DD.MM.YYYY'), 3, 60000, 37, 'mlidevng', '123');
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Кирилл', 'Сусев', to_date('08.09.2010', 'DD.MM.YYYY'), 4, 30000, 30, 'k_susev', '123');
+       values('Кирилл', 'Сусев', to_date('08.09.2010', 'DD.MM.YYYY'), 4, 30000, 30, 'ksusevng', '123');
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Стас', 'Верин', to_date('08.12.1999', 'DD.MM.YYYY'), 5, 35000, 31, 's_verin', '123');
+       values('Стас', 'Верин', to_date('08.12.1999', 'DD.MM.YYYY'), 5, 35000, 31, 'sverinng', '123');
 insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Владислав', 'Кукухин', to_date('08.11.2018', 'DD.MM.YYYY'), 6, 350000, 36, 'v_kukukhin', '123');
-insert into employees(first_name, last_name, hire_date, profession_id, salary, age, login, password)
-       values('Дмитрий', 'Волков', to_date('09.12.2008', 'DD.MM.YYYY'), 7, 40000, 28, 'd_volkov', '123');
+       values('Владислав', 'Кукухин', to_date('08.11.2018', 'DD.MM.YYYY'), 6, 350000, 36, 'vkukukhinng', '123');
+
+create user sstepinng identified by nikita default tablespace users temporary tablespace temp;
+create user npoverng identified by nikita default tablespace users temporary tablespace temp;
+create user mlernng identified by nikita default tablespace users temporary tablespace temp;
+create user aisterng identified by nikita default tablespace users temporary tablespace temp;
+create user mlidevng identified by nikita default tablespace users temporary tablespace temp;
+create user ksusevng identified by nikita default tablespace users temporary tablespace temp;
+create user sverinng identified by nikita default tablespace users temporary tablespace temp;
+create user vkukukhinng identified by nikita default tablespace users temporary tablespace temp;
+
+grant connect to sstepinng;
+grant connect to npoverng;
+grant connect to mlernng;
+grant connect to aisterng;
+grant connect to mlidevng;
+grant connect to ksusevng;
+grant connect to sverinng;
+grant connect to vkukukhinng;
+
+grant director_ng to vkukukhinng;
+grant manager_ng to sstepinng;
+grant manager_ng to npoverng;
+grant manager_ng to mlernng;
+grant manager_ng to aisterng;
+grant manager_ng to mlidevng;
+grant hr_ng to ksusevng;
+grant hr_ng to sverinng;
 
 update departments set manager_id = 3 where department_name = 'Инжиниринг';
 update departments set manager_id = 6 where department_name = 'Финансы';
 update departments set manager_id = 7 where department_name = 'HR';
 update departments set manager_id = 8 where department_name = 'Директорат';
-update departments set manager_id = 9 where department_name = 'Тех. обслуживание';
 
 insert into EquipmentType(equipment_type_name) values('Принтер');
 insert into EquipmentType(equipment_type_name) values('Компьютер');

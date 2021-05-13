@@ -6,6 +6,7 @@ import services.DataUpdater;
 import services.QueriesExecutor;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class LoginInteractor {
     public void connect(String ip, String port, String user, String password) throws ClassNotFoundException, SQLException {
@@ -15,20 +16,21 @@ public class LoginInteractor {
         DataUpdater.setConnection();
     }
 
-    public UserRole getUserRoleBy(String login, String password) throws SQLException {
-        String userProfession = QueriesExecutor.getEmployeeProfession(login, password);
-        if (userProfession == null) {
-            return null;
-        } else if (userProfession.equals("Конструктор") || userProfession.equals("Инженер")) {
-            return UserRole.MANAGER;
-        } else if (userProfession.equals("Директор")) {
-            return UserRole.DIRECTOR;
-        } else if (userProfession.equals("Менеджер") || userProfession.equals("Бухгалтер")) {
-            return UserRole.HR;
-        } else if (userProfession.equals("Админ")) {
+    public UserRole getUserRole() throws SQLException {
+        ArrayList<String> roles = QueriesExecutor.getUserRole();
+        for (String role: roles) {
+            System.out.println(role);
+        }
+        if (roles.contains("manager_ng") && roles.contains("hr_ng") && roles.contains("director_ng")) {
             return UserRole.ADMIN;
+        } else if (roles.contains("manager_ng")) {
+            return UserRole.MANAGER;
+        } else if (roles.contains("hr_ng")) {
+            return UserRole.HR;
+        } else if (roles.contains("director_ng")) {
+            return UserRole.DIRECTOR;
         } else {
-            return null;
+            return UserRole.ADMIN;
         }
     }
 }

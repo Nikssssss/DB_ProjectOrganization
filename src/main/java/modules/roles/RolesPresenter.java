@@ -1,9 +1,12 @@
 package modules.roles;
 
+import modules.register.RegisterView;
 import modules.roles.views.UserRoleView;
+import services.QueriesExecutor;
 
 import java.lang.ref.WeakReference;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class RolesPresenter {
@@ -26,25 +29,11 @@ public class RolesPresenter {
     }
 
     public void tablesButtonPressed() {
-        try {
-            interactor.checkDatabaseCreation();
-            router.showTablesScene();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Objects.requireNonNull(view.get()).setErrorMessage("База данных очищена.\n" +
-                    "Пожалуйста, попросите Админа нажать кнопку \"Создать БД\" для инициализации базы данных");
-        }
+        router.showTablesScene();
     }
 
     public void queriesButtonPressed() {
-        try {
-            interactor.checkDatabaseCreation();
-            router.showQueriesScene();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Objects.requireNonNull(view.get()).setErrorMessage("База данных очищена.\n" +
-                    "Пожалуйста, попросите Админа нажать кнопку \"Создать БД\" для инициализации базы данных");
-        }
+        router.showQueriesScene();
     }
 
     public void createDatabaseButtonPressed() {
@@ -65,8 +54,10 @@ public class RolesPresenter {
             interactor.removeDatabase();
         } catch (SQLException e) {
             if (e.getErrorCode() == 17081) {
+                e.printStackTrace();
                 Objects.requireNonNull(view.get()).setErrorMessage("База данных уже очищена");
             } else {
+                e.printStackTrace();
                 Objects.requireNonNull(view.get()).setErrorMessage(e.getSQLState());
             }
         }
@@ -83,6 +74,8 @@ public class RolesPresenter {
                     Objects.requireNonNull(view.get()).setErrorMessage("База данных уже проинициализирована");
                 }
                 e.printStackTrace();
+                System.out.println(e.getSQLState());
+                System.out.println(e.getErrorCode());
             } else {
                 Objects.requireNonNull(view.get()).setErrorMessage(e.getMessage());
             }
@@ -94,10 +87,16 @@ public class RolesPresenter {
             interactor.clearDatabase();
         } catch (SQLException e) {
             if (e.getErrorCode() == 17081) {
+                e.printStackTrace();
                 Objects.requireNonNull(view.get()).setErrorMessage("База данных уже очищена");
             } else {
+                e.printStackTrace();
                 Objects.requireNonNull(view.get()).setErrorMessage(e.getSQLState());
             }
         }
+    }
+
+    public void addUserButtonPressed() {
+        new RegisterView();
     }
 }

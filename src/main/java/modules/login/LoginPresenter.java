@@ -28,8 +28,8 @@ public class LoginPresenter {
         Objects.requireNonNull(this.view.get()).configureView();
     }
 
-    public void loginButtonPressed(String ip, String port, String login, String password, String systemLogin, String systemPassword) {
-        this.login(ip, port, login, password, systemLogin, systemPassword);
+    public void loginButtonPressed(String ip, String port, String login, String password) {
+        this.login(ip, port, login, password);
     }
 
     public void localTemplateButtonPressed() {
@@ -42,24 +42,15 @@ public class LoginPresenter {
 
     //MARK: private methods
 
-    private void login(String ip, String port, String login, String password, String systemLogin, String systemPassword){
+    private void login(String ip, String port, String login, String password){
         try {
             if (Objects.requireNonNull(view.get()).hasBlankFields()) {
                 Objects.requireNonNull(view.get()).setErrorMessage("Пожалуйста, заполните все поля");
                 return;
             }
             interactor.connect(ip, port, login, password);
-            if (systemLogin.equals("admin") && systemPassword.equals("admin")) {
-                CurrentUserRole.setUserRole(UserRole.ADMIN);
-                router.showUserRoleScene();
-                return;
-            }
-            UserRole currentUserRole = interactor.getUserRoleBy(systemLogin, systemPassword);
-            if (currentUserRole == null) {
-                Objects.requireNonNull(view.get()).setErrorMessage("Пожалуйста, введите корректные системные логин и пароль");
-                return;
-            }
-            CurrentUserRole.setUserRole(currentUserRole);
+            UserRole userRole = interactor.getUserRole();
+            CurrentUserRole.setUserRole(userRole);
             router.showUserRoleScene();
         } catch (ClassNotFoundException e) {
             Objects.requireNonNull(view.get()).setErrorMessage("База данных недоступна");

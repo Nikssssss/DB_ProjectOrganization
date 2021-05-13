@@ -24,3 +24,6 @@ drop sequence projects_sequence;
 drop sequence contracts_sequence;
 drop sequence subcontracts_sequence;
 drop sequence equipment_type_sequence;
+drop role hr_ng;
+drop role manager_ng;
+drop role director_ng;
